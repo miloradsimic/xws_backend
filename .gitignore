@@ -1,0 +1,9 @@
+.class
+.settings/
+.project
+.classpath
+target/
+TestClass.java
+mvnw
+mvnw.cmd
+bin/
