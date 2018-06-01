@@ -12,7 +12,7 @@ import booking_site.xws_proj.repository.UserRepository;
 import booking_site.xws_proj.service.UserService;
 
 @Service
-public class RepositoryUserService implements UserService {
+public class UserServiceImpl implements UserService {
 	
 
 	@Autowired
@@ -25,8 +25,12 @@ public class RepositoryUserService implements UserService {
 	}
 
 	@Override
-	public Collection<User> findUsers(String name) {
-		// TODO Auto-generated method stub
+	public User findByEmailAndPasswordLogin(String email, String password) {
+		for (User user : userRepository.findAll()) {
+			if(user.getEmail().equalsIgnoreCase(email) && user.getPassword().equals(password)) {
+				return user;
+			}
+		}
 		return null;
 	}
 

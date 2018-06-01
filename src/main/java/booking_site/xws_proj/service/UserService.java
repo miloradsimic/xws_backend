@@ -8,5 +8,5 @@ public interface UserService {
 
 
 	Collection<User> findAll();	
-	Collection<User> findUsers(String name);
+	User findByEmailAndPasswordLogin(String email, String password);
 }

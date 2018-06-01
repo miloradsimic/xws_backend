@@ -2,6 +2,7 @@ package booking_site.xws_proj.dto.response;
 
 import booking_site.xws_proj.domain.User;
 
+// TODO: Remove if not needed later.
 public class UserResponseDTO {
 
 	public long id;
