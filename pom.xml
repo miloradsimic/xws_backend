@@ -46,10 +46,10 @@
 
 		<!-- Next one for querydsl http://www.querydsl.com/static/querydsl/2.1.2/reference/html/ch02s02.html -->
 		<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
-		</dependency> -->
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
