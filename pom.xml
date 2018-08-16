@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>booking_site</groupId>
-  <artifactId>xws_proj</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+	<groupId>booking_site</groupId>
+	<artifactId>xws_proj</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-  <name>xws_proj</name>
-  <url>http://maven.apache.org</url>
+	<name>xws_proj</name>
+	<url>http://maven.apache.org</url>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -61,11 +61,51 @@
 
 	<build>
 		<plugins>
+
+ 			<!-- Uputstvo za generisanje Q fajlova za querydsl
+ 			
+ 				-Pripremiti sve domain fajlove u paketu sourceDirectory
+ 				-Otkomentarisati plugin ispod
+ 				-Pokrenuti, run config -> generate-sources
+ 				-Pronaci generisane fajlove u outputDirectory i kopirati ih u sourceDirectory
+ 				-Po zelji sada se mogu premestiti (ja ih cuvam u domain/querydsl paketu)
+ 				
+ 			-->
+
+			<!-- https://github.com/querydsl/apt-maven-plugin -->
+			<!--Dependency: https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>1.1.3</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>src/main/java/booking_site/xws_proj/domain</sourceDirectory>
+							<outputDirectory>target/generated-sources/querydsl</outputDirectory>
+							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.querydsl</groupId>
+						<artifactId>querydsl-apt</artifactId>
+						<version>4.1.4</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 

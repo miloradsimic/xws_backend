@@ -1,14 +1,15 @@
-package booking_site.xws_proj.domain;
+package booking_site.xws_proj.domain.querydsl;
 
-import static com.querydsl.core.types.PathMetadataFactory.forVariable;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import javax.annotation.Generated;
+import com.querydsl.core.types.dsl.*;
 
-import com.querydsl.core.types.Path;
+import booking_site.xws_proj.domain.User;
+
 import com.querydsl.core.types.PathMetadata;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.StringPath;
+import javax.annotation.Generated;
+import com.querydsl.core.types.Path;
+
 
 /**
  * QUser is a Querydsl query type for User
@@ -16,7 +17,7 @@ import com.querydsl.core.types.dsl.StringPath;
 @Generated("com.querydsl.codegen.EntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = -234975087L;
+    private static final long serialVersionUID = -1518711504L;
 
     public static final QUser user = new QUser("user");
 
@@ -27,7 +28,6 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath name = createString("name");
 
     public final StringPath password = createString("password");
-
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));
@@ -42,3 +42,4 @@ public class QUser extends EntityPathBase<User> {
     }
 
 }
+
