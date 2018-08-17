@@ -1,15 +1,20 @@
 package booking_site.xws_proj.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import booking_site.xws_proj.AppUtils;
 import booking_site.xws_proj.dto.mapper.UserMapper;
+import booking_site.xws_proj.dto.request.UserLoginRequestDTO;
 import booking_site.xws_proj.dto.response.UserResponseDTO;
 import booking_site.xws_proj.repository.UserRepository;
 import booking_site.xws_proj.service.UserService;
@@ -25,12 +30,18 @@ public class AuthenticationController {
 	private UserService service;
 	
 	@RequestMapping(path="/login", method = RequestMethod.POST)
-	public UserResponseDTO tryToLogin(@RequestHeader("Authorization") String encoded) {
+	public HashMap<String, Object> tryToLogin(@RequestBody UserLoginRequestDTO user) {
+		HashMap<String, Object> retVal = new HashMap<>();
+		UserResponseDTO userResponse = UserMapper.mapEntityIntoDTO(this.service.findByEmailAndPasswordLogin(user.email, user.password));
 		
-		String username = AppUtils.getUsernameFromBasic(encoded);
-		String password = AppUtils.getPasswordFromBasic(encoded);
-
-		return UserMapper.mapEntityIntoDTO(this.service.findByEmailAndPasswordLogin(username, password));
+		if(userResponse == null) {
+			retVal.put("message", "The email or the password you've entered is incorrect");
+			return retVal;
+		}
+		retVal.put("message", "OK");
+		retVal.put("data", userResponse);
+		
+		return retVal;
 	}
 	
 
