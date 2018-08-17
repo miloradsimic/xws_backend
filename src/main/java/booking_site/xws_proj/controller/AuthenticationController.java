@@ -2,14 +2,13 @@ package booking_site.xws_proj.controller;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import booking_site.xws_proj.AppUtils;
@@ -30,7 +29,7 @@ public class AuthenticationController {
 	private UserService service;
 	
 	@RequestMapping(path="/login", method = RequestMethod.POST)
-	public HashMap<String, Object> tryToLogin(@RequestBody UserLoginRequestDTO user) {
+	public HashMap<String, Object> tryToLogin(@RequestBody UserLoginRequestDTO user, HttpServletResponse response) {
 		HashMap<String, Object> retVal = new HashMap<>();
 		UserResponseDTO userResponse = UserMapper.mapEntityIntoDTO(this.service.findByEmailAndPasswordLogin(user.email, user.password));
 		
@@ -40,6 +39,9 @@ public class AuthenticationController {
 		}
 		retVal.put("message", "OK");
 		retVal.put("data", userResponse);
+		
+		response.setHeader("Authorization", AppUtils.encryptBasic(user));
+		
 		
 		return retVal;
 	}
