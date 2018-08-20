@@ -1,35 +1,43 @@
 package booking_site.xws_proj.domain;
 
+import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Inheritance;
 import javax.persistence.TableGenerator;
+
+import booking_site.xws_proj.domain.enums.Role;
 
 
 @Entity
-@Table(name = "tbl_user")
-public class User{	
+// koncept jedna tabela po konkretnoj klasi
+@Inheritance(strategy = TABLE_PER_CLASS)
+public class AUser{	
 
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
 	// @Id
 	// @GeneratedValue(strategy = GenerationType.TABLE)
-	private long id;
+	protected long id;
 
 	@Column(nullable = false)
-	private String email;
+	protected String email;
 
 	@Column(nullable = false)
-	private String password;
+	protected String password;
 
 	@Column(nullable = false)
-	private String name;
+	protected String name;
 
-	public User() {
+	@Column(name = "role", nullable = false)
+	protected Role role;
+	
+	public AUser() {
 	}
 
 	public long getId() {
@@ -63,5 +71,19 @@ public class User{
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public String getRoleString() {
+		return role.toString();
+	}
+
+
 
 }

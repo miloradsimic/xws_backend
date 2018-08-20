@@ -1,6 +1,6 @@
-package booking_site.xws_proj.dto.response;
+package booking_site.xws_proj.domain.dto.response;
 
-public class UserLoginResponseDTO {
+public class UserLoginResponseDTO extends ResponseErrorHandler {
 	
 	public long id;
 	public String email;

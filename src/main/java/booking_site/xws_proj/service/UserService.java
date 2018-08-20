@@ -1,38 +1,96 @@
-package booking_site.xws_proj.repository.impl;
+package booking_site.xws_proj.service;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-
 import booking_site.xws_proj.domain.User;
 import booking_site.xws_proj.repository.UserRepository;
-import booking_site.xws_proj.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserService implements IUserService {
 	
 
 	@Autowired
 	private UserRepository userRepository;
 
+	//crud metode
 	@Override
-	public Collection<User> findAll() {
-		
-		return Lists.newArrayList(userRepository.findAll());
-	}
-
-	@Override
-	public User findByEmailAndPasswordLogin(String email, String password) {
-		for (User user : userRepository.findAll()) {
-			if(user.getEmail().equalsIgnoreCase(email) && user.getPassword().equals(password)) {
-				return user;
-			}
+	public boolean createUser(User user) {
+		if(userRepository.findByEmail(user.getEmail()) != null) {
+			return false;
 		}
-		return null;
+		userRepository.save(user);
+		return true;
 	}
 
+	@Override
+	public User findUser(long id) {
+		return userRepository.findOne(id);
+	}
 
+	@Override
+	public boolean updateUser(User user) {
+		if(userRepository.exists(user.getId())) {
+			userRepository.save(user);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void deleteUser(long id) {
+		if(userRepository.exists(id)) {
+			User user = userRepository.findOne(id);
+			user.setDeleted(true);
+			userRepository.save(user);
+		}
+	}
+	//ostalo
+	@Override
+	public List<User> findAll() {
+		List<User> list = new ArrayList<>();
+		userRepository.findAll().forEach(e -> list.add(e));
+		return list;
+	}
+
+	@Override
+	public boolean blockUser(long id) {
+		if(userRepository.exists(id)) {
+			User user = userRepository.findOne(id);
+			user.setActive(false);
+			userRepository.save(user);
+			return true;
+		}
+		return false;
+	}
+
+		
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

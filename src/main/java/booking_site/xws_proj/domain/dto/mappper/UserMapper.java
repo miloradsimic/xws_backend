@@ -1,20 +1,22 @@
-package booking_site.xws_proj.dto.mapper;
+package booking_site.xws_proj.domain.dto.mappper;
 
+import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.User;
-import booking_site.xws_proj.dto.response.UserResponseDTO;
+import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 
 public class UserMapper {
 
-	public static UserResponseDTO mapEntityIntoDTO(User entity) {
+	public static UserResponseDTO mapEntityIntoDTO(AUser aUser) {
 
-		if (entity == null) {
+		if (aUser == null) {
 			return null;
 		}
 		UserResponseDTO dto = new UserResponseDTO();
 
-		dto.email = entity.getEmail();
-		dto.name = (entity.getName());
-		dto.id = (entity.getId());
+		dto.email = aUser.getEmail();
+		dto.name = aUser.getName();
+		dto.id = aUser.getId();
+		dto.role = aUser.getRoleString();
 
 		return dto;
 	}

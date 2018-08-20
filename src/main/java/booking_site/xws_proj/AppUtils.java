@@ -3,7 +3,7 @@ package booking_site.xws_proj;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
-import booking_site.xws_proj.dto.request.UserLoginRequestDTO;
+import booking_site.xws_proj.domain.dto.request.UserLoginRequestDTO;
 
 public class AppUtils {
 
@@ -33,9 +33,9 @@ public class AppUtils {
 		System.out.println(password);
 		return password;
 	}
-
-	public static String encryptBasic(UserLoginRequestDTO user) {
-		String credentials = user.email + ":" + user.password;
+	
+	public static String encryptBasic(String email, String password) {
+		String credentials = email + ":" + password;
 		String encoded = "";
 		try {
 			encoded = Base64.getEncoder().encodeToString(credentials.getBytes("UTF-8"));

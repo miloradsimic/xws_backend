@@ -6,10 +6,11 @@ import javax.persistence.Table;
 import booking_site.xws_proj.domain.enums.Role;
 
 @Entity
-@Table(name = "tbl_agent")
-public class Agent extends AUser {
+@Table(name = "tbl_admin")
+public class Admin extends AUser {
 
-	public Agent() {
-		role = Role.AGENT;
+	public Admin() {
+		role = Role.ADMIN;
 	}
+
 }
