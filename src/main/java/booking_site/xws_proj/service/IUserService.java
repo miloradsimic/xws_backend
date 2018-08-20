@@ -18,7 +18,7 @@ public interface IUserService {
 	
 	//ostalo
 	List<User> findAll();
-	boolean blockUser(long id);
+	boolean blockUser(long id, boolean action);
 	
 	
 }

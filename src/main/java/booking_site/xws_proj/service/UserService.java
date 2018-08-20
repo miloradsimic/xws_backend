@@ -57,10 +57,10 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public boolean blockUser(long id) {
+	public boolean blockUser(long id, boolean action) {
 		if(userRepository.exists(id)) {
 			User user = userRepository.findOne(id);
-			user.setActive(false);
+			user.setActive(action);
 			userRepository.save(user);
 			return true;
 		}

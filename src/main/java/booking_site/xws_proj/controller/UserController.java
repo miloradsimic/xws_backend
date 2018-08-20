@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,7 +77,7 @@ public class UserController {
 			reservationResponse = new ReservationResponseDTO();
 			reservationResponse.setErrorMessage("You have to be logged to make a reservation.");
 			return new ResponseEntity<ReservationResponseDTO>(reservationResponse, HttpStatus.UNAUTHORIZED);
-					
+
 		} // else successful login
 
 		// TODO: Unimplemented!!! check if user is reserving for himself
@@ -91,7 +90,7 @@ public class UserController {
 		reservationResponse.setStart_time(new Date());
 		reservationResponse.setEnd_time(new Date());
 		return new ResponseEntity<ReservationResponseDTO>(reservationResponse, HttpStatus.OK);
-		
+
 	}
 
 	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
@@ -99,25 +98,86 @@ public class UserController {
 			@PathVariable("id") Long userId) {
 		ResponseErrorHandler errorResponse;
 		AUser admin;
-		
+
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
 			errorResponse = new ResponseErrorHandler();
 			errorResponse.setErrorMessage("You have to be logged to delete user.");
 			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
-					
-		} if(admin.getRole() != Role.ADMIN) { 
+
+		}
+		if (admin.getRole() != Role.ADMIN) {
 			errorResponse = new ResponseErrorHandler();
 			errorResponse.setErrorMessage("Only admins have privs to delete users.");
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED); //Ili FROBIDEN ili nesto drugo?? 
-			
-		}	// else successful login
-	
-		System.out.println("-----------------------------------------------------------"+userId);
-		
-		userRepository.delete(userId);
+			// Ili FORBIDEN ili nesto drugo??
+			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+		} // else successful login
+
+		userService.deleteUser(userId);
 		return new ResponseEntity<>(HttpStatus.OK);
-		
+
 	}
+
+	@RequestMapping(path = "/user", method = RequestMethod.PUT)
+	public ResponseEntity<ResponseErrorHandler> updateUser(@RequestHeader("Authorization") String encoded,
+			@RequestBody User userDTO) {
+		ResponseErrorHandler errorResponse;
+		User user;
+
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((user = userRepository.findByEmailAndPassword(username, password)) == null) {
+			errorResponse = new ResponseErrorHandler();
+			errorResponse.setErrorMessage("You have to be logged to update user.");
+			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+		} if (!user.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
+			errorResponse = new ResponseErrorHandler();
+			errorResponse.setErrorMessage("You can update only your account.");
+			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+		} if (user.isActive() != userDTO.isActive() || user.isDeleted() != userDTO.isDeleted() || userDTO.getRole() != Role.USER) {
+			errorResponse = new ResponseErrorHandler();
+			errorResponse.setErrorMessage("Only admins can delete and block users.");
+			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+		}// else successful login
+
+		userDTO.setId(user.getId());
+		userService.updateUser(userDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
+
+	}	
+	
+	@RequestMapping(path = "/user/{id}/{action}", method = RequestMethod.PUT)
+	public ResponseEntity<ResponseErrorHandler> blockUser(@RequestHeader("Authorization") String encoded,
+			@PathVariable("id") Long userId, @PathVariable Boolean action) {
+		ResponseErrorHandler errorResponse;
+		AUser admin;
+
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
+			errorResponse = new ResponseErrorHandler();
+			errorResponse.setErrorMessage("You have to be logged to manage users.");
+			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+		}
+		if (admin.getRole() != Role.ADMIN) {
+			errorResponse = new ResponseErrorHandler();
+			errorResponse.setErrorMessage("Only admins have privs to manage users.");
+			// Ili FROBIDEN ili nesto drugo??
+			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+		} // else successful login
+
+		if (!userService.blockUser(userId, action)) {
+			errorResponse = new ResponseErrorHandler();
+			errorResponse.setErrorMessage("User doesn't exit.");
+			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 }
