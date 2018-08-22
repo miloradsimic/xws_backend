@@ -17,20 +17,17 @@ public class Reservation {
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
-	// @Id
-	// @GeneratedValue(strategy = GenerationType.TABLE)
 	private long id;
 	@Column(nullable = false)
 	private String email;
-	@Column(nullable = false)
+	@Column(nullable = false, name = "start_time")
 	private Date startTime;
-	@Column(nullable = false)
+	@Column(nullable = false, name = "end_time")
 	private Date endTime;
-
-	@Column(nullable = false)
-	private long id_accomomdation;
-	@Column(nullable = false)
-	private String email_agent;
+	@Column(nullable = false, name = "id_accommodation")
+	private long idAccommomdation;
+	@Column(nullable = false, name = "email_agent")
+	private String emailAgent;
 
 	public Reservation() {
 
@@ -52,16 +49,20 @@ public class Reservation {
 		this.email = email;
 	}
 
-	public long getId_accomomdation() {
-		return id_accomomdation;
+	public long getIdAccommomdation() {
+		return idAccommomdation;
 	}
 
-	public void setId_accomomdation(long id_accomomdation) {
-		this.id_accomomdation = id_accomomdation;
+	public void setIdAccommomdation(long idAccommomdation) {
+		this.idAccommomdation = idAccommomdation;
 	}
 
-	public String getEmail_agent() {
-		return email_agent;
+	public String getEmailAgent() {
+		return emailAgent;
+	}
+
+	public void setEmailAgent(String emailAgent) {
+		this.emailAgent = emailAgent;
 	}
 
 	public Date getStartTime() {
@@ -70,10 +71,6 @@ public class Reservation {
 
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
-	}
-
-	public void setEmail_agent(String email_agent) {
-		this.email_agent = email_agent;
 	}
 
 	public Date getEndTime() {

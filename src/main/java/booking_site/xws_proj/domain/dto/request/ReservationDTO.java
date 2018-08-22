@@ -8,9 +8,9 @@ public class ReservationDTO {
 
 	public long user_id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date startTime;
+	public Date start_time;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date endTime;
+	public Date end_time;
 	public long id_accommodation;
 
 	public ReservationDTO() {
@@ -24,20 +24,20 @@ public class ReservationDTO {
 		this.user_id = user_id;
 	}
 
-	public Date getStartTime() {
-		return startTime;
+	public Date getStart_time() {
+		return start_time;
 	}
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setStart_time(Date start_time) {
+		this.start_time = start_time;
 	}
 
-	public Date getEndTime() {
-		return endTime;
+	public Date getEnd_time() {
+		return end_time;
 	}
 
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public void setEnd_time(Date end_time) {
+		this.end_time = end_time;
 	}
 
 	public long getId_accommodation() {

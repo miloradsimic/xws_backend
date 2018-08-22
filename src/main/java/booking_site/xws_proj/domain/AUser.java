@@ -20,8 +20,6 @@ public class AUser {
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
-	// @Id
-	// @GeneratedValue(strategy = GenerationType.TABLE)
 	protected long id;
 
 	@Column(nullable = false)
