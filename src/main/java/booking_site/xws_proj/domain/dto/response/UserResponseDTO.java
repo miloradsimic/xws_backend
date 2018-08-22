@@ -3,9 +3,9 @@ package booking_site.xws_proj.domain.dto.response;
 public class UserResponseDTO {
 
 	private long id;
-	public String email;
-	public String name;
-	public String role;
+	private String email;
+	private String name;
+	private String role;
 
 	public UserResponseDTO() {
 	}

@@ -37,9 +37,9 @@ public class User extends AUser {
 	}
 
 	public User(UserRegisterRequestDTO userDto) {
-		this.email = userDto.email;
-		this.name = userDto.name;
-		this.password = userDto.password;
+		this.email = userDto.getEmail();
+		this.name = userDto.getName();
+		this.password = userDto.getPassword();
 
 		role = Role.USER;
 		deleted = false;

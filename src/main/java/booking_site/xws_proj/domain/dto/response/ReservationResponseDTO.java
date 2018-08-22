@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class ReservationResponseDTO {
 
-	public long id;
-	public String user_email;
-	public String agent_email;
-	public Date start_time;
-	public Date end_time;
-	public String address;
+	private long id;
+	private String user_email;
+	private String agent_email;
+	private Date start_time;
+	private Date end_time;
+	private String address;
 
 	public ReservationResponseDTO() {
 		super();

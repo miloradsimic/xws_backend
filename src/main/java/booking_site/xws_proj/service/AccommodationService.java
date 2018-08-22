@@ -27,12 +27,11 @@ public class AccommodationService implements IAccommodationService {
 	}
 
 	@Override
-	public boolean update(Accommodation entry) {
+	public Accommodation update(Accommodation entry) {
 		if (accommodationRepository.exists(entry.getId())) {
-			accommodationRepository.save(entry);
-			return true;
+			return accommodationRepository.save(entry);
 		}
-		return false;
+		return null;
 	}
 
 	@Override

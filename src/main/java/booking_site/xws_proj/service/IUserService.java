@@ -8,7 +8,7 @@ import booking_site.xws_proj.domain.User;
 public interface IUserService {
 
 	// crud
-	boolean createUser(User user);
+	User createUser(User user);
 
 	User findUser(long id);
 

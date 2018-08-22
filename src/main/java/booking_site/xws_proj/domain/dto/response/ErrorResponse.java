@@ -2,7 +2,7 @@ package booking_site.xws_proj.domain.dto.response;
 
 public class ErrorResponse {
 
-	protected String error;
+	private String error;
 
 	public ErrorResponse() {
 	}

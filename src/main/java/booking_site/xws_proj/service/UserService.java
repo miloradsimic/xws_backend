@@ -17,12 +17,11 @@ public class UserService implements IUserService {
 
 	// crud metode
 	@Override
-	public boolean createUser(User user) {
+	public User createUser(User user) {
 		if (userRepository.findByEmail(user.getEmail()) != null) {
-			return false;
+			return null;
 		}
-		userRepository.save(user);
-		return true;
+		return userRepository.save(user);
 	}
 
 	@Override

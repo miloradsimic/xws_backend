@@ -2,9 +2,9 @@ package booking_site.xws_proj.domain.dto.response;
 
 public class UserLoginResponseDTO {
 
-	public long id;
-	public String email;
-	public String name;
+	private long id;
+	private String email;
+	private String name;
 
 	public long getId() {
 		return id;

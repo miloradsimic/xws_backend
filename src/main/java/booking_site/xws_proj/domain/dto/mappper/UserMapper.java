@@ -12,9 +12,10 @@ public class UserMapper {
 		}
 		UserResponseDTO dto = new UserResponseDTO();
 
-		dto.email = aUser.getEmail();
-		dto.name = aUser.getName();
-		dto.role = aUser.getRoleString();
+		dto.setId(aUser.getId());
+		dto.setEmail(aUser.getEmail());
+		dto.setName(aUser.getName());
+		dto.setRole(aUser.getRoleString());
 
 		return dto;
 	}

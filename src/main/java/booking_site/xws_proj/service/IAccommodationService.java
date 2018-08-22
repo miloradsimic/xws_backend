@@ -11,7 +11,7 @@ public interface IAccommodationService {
 
 	Accommodation find(long id);
 
-	boolean update(Accommodation entry);
+	Accommodation update(Accommodation entry);
 
 	void delete(long id);
 

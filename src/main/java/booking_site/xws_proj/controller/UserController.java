@@ -21,12 +21,10 @@ import booking_site.xws_proj.domain.User;
 import booking_site.xws_proj.domain.dto.mappper.UserMapper;
 import booking_site.xws_proj.domain.dto.request.ReservationDTO;
 import booking_site.xws_proj.domain.dto.request.UserRegisterRequestDTO;
-import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
 import booking_site.xws_proj.domain.dto.response.ErrorResponse;
-import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
+import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
 import booking_site.xws_proj.repository.AUserRepository;
-import booking_site.xws_proj.repository.AdminRepository;
 import booking_site.xws_proj.repository.UserRepository;
 import booking_site.xws_proj.service.IUserService;
 
@@ -47,22 +45,23 @@ public class UserController {
 	public ResponseEntity<List<User>> readUsers() {
 		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
 	}
+
 	/*
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/register", method = RequestMethod.POST)
 	public ResponseEntity<Object> createUser(@RequestBody UserRegisterRequestDTO userDto,
 			HttpServletResponse response) {
-		User user = new User(userDto);
-		if (userService.createUser(user)) {
-			response.setHeader("Authorization", AppUtils.encryptBasic(user.getEmail(), user.getPassword()));
-			return new ResponseEntity<Object>(UserMapper.mapEntityIntoDTO(user), HttpStatus.CREATED);
+		User user;
+		if ((user = userService.createUser(new User(userDto))) == null) {
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("The email is already registered. Try another one!");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.CONFLICT);
 		}
-		ErrorResponse errorResponse = new ErrorResponse();
-		errorResponse.setError("The email is already registered. Try another one!");
-		return new ResponseEntity<Object>(errorResponse, HttpStatus.CONFLICT);
-
+		response.setHeader("Authorization", AppUtils.encryptBasic(user.getEmail(), user.getPassword()));
+		return new ResponseEntity<Object>(UserMapper.mapEntityIntoDTO(user), HttpStatus.CREATED);
 	}
+
 	/*
 	 * @return ReservationResponseDTO or ErrorResponse object
 	 */
@@ -93,6 +92,7 @@ public class UserController {
 		return new ResponseEntity<Object>(reservationResponse, HttpStatus.OK);
 
 	}
+
 	/*
 	 * @return Nothing or ErrorResponse object
 	 */
@@ -121,6 +121,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
+
 	/*
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
@@ -157,6 +158,7 @@ public class UserController {
 				HttpStatus.OK);
 
 	}
+
 	/*
 	 * @return Nothing or ErrorResponse object
 	 */

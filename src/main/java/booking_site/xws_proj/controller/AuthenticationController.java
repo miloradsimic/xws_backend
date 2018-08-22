@@ -31,7 +31,7 @@ public class AuthenticationController {
 	public ResponseEntity<Object> tryToLogin(@RequestBody UserLoginRequestDTO user,
 			HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
-				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.email, user.password));
+				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
 
 		if (userResponse == null) {
 			ErrorResponse errorResponse = new ErrorResponse();
@@ -39,7 +39,7 @@ public class AuthenticationController {
 			return new ResponseEntity<Object>(userResponse, HttpStatus.UNAUTHORIZED);
 		}
 
-		response.setHeader("Authorization", AppUtils.encryptBasic(user.email, user.password));
+		response.setHeader("Authorization", AppUtils.encryptBasic(user.getEmail(), user.getPassword()));
 		return new ResponseEntity<Object>(userResponse, HttpStatus.OK);
 
 	}

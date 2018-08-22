@@ -2,8 +2,8 @@ package booking_site.xws_proj.domain.dto.request;
 
 public class UserLoginRequestDTO {
 
-	public String email;
-	public String password;
+	private String email;
+	private String password;
 
 	public UserLoginRequestDTO() {
 	}

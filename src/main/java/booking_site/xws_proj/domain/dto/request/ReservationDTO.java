@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ReservationDTO {
 
-	public long user_id;
+	private long user_id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date start_time;
+	private Date start_time;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date end_time;
-	public long id_accommodation;
+	private Date end_time;
+	private long id_accommodation;
 
 	public ReservationDTO() {
 	}
