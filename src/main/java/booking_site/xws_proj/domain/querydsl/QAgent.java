@@ -21,7 +21,7 @@ public class QAgent extends EntityPathBase<Agent> {
 
     public static final QAgent agent = new QAgent("agent");
 
-    public final QUserAbstr _super = new QUserAbstr(this);
+    public final QAUser _super = new QAUser(this);
 
     //inherited
     public final StringPath email = _super.email;

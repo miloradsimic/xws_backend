@@ -21,6 +21,8 @@ public class QAccommodation extends EntityPathBase<Accommodation> {
 
     public static final QAccommodation accommodation = new QAccommodation("accommodation");
 
+    public final BooleanPath deleted = createBoolean("deleted");
+
     public final StringPath description = createString("description");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

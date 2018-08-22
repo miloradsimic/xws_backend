@@ -5,9 +5,9 @@ insert into tbl_user(id, email, name, password, role, active, deleted) values (1
 
 ----ADMIN--
 insert into tbl_admin(id, email, name, password, role) values (2, 'a1@a.a', 'Admin1', 'pass', 1);
---
-----ACCOMMODATION--
---insert into tbl_accommodation(id, id_agent, description, price) values (1, 1, 'One-bedroom studio', 10.00);
+
+--ACCOMMODATION--
+insert into tbl_accommodation(id, id_agent, description, price, deleted) values (1, 1, 'One-bedroom studio', 10.00, false);
 --
 ----AGENT--
 --insert into tbl_reservation(id, email, start_time, end_time, password) values (1, 'a1@a.a', 'Agent1', 'pass');

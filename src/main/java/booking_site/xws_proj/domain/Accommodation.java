@@ -24,9 +24,11 @@ public class Accommodation {
 	private String description;
 	@Column(nullable = false)
 	private double price;
+	@Column(nullable = false)
+	private boolean deleted;
 	
 	public Accommodation(){
-		
+		deleted = false;
 	}
 
 	public long getId() {
@@ -60,5 +62,14 @@ public class Accommodation {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 	
 }

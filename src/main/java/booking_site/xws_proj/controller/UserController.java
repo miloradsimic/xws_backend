@@ -121,32 +121,33 @@ public class UserController {
 	}
 
 	@RequestMapping(path = "/user", method = RequestMethod.PUT)
-	public ResponseEntity<ResponseErrorHandler> updateUser(@RequestHeader("Authorization") String encoded,
+	public ResponseEntity<UserResponseDTO> updateUser(@RequestHeader("Authorization") String encoded,
 			@RequestBody User userDTO) {
-		ResponseErrorHandler errorResponse;
+		UserResponseDTO errorResponse;
 		User user;
 
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((user = userRepository.findByEmailAndPassword(username, password)) == null) {
-			errorResponse = new ResponseErrorHandler();
+			errorResponse = new UserResponseDTO();
 			errorResponse.setErrorMessage("You have to be logged to update user.");
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		} if (!user.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
-			errorResponse = new ResponseErrorHandler();
+			errorResponse = new UserResponseDTO();
 			errorResponse.setErrorMessage("You can update only your account.");
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		} if (user.isActive() != userDTO.isActive() || user.isDeleted() != userDTO.isDeleted() || userDTO.getRole() != Role.USER) {
-			errorResponse = new ResponseErrorHandler();
+			errorResponse = new UserResponseDTO();
 			errorResponse.setErrorMessage("Only admins can delete and block users.");
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
 		}// else successful login
 
 		userDTO.setId(user.getId());
 		userService.updateUser(userDTO);
-		return new ResponseEntity<>(HttpStatus.OK);
+		
+		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())), HttpStatus.OK);
 
 	}	
 	

@@ -12,14 +12,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QUserAbstr is a Querydsl query type for UserAbstr
+ * QAUser is a Querydsl query type for AUser
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QUserAbstr extends EntityPathBase<AUser> {
+public class QAUser extends EntityPathBase<AUser> {
 
-    private static final long serialVersionUID = 1905832736L;
+    private static final long serialVersionUID = 145232647L;
 
-    public static final QUserAbstr userAbstr = new QUserAbstr("userAbstr");
+    public static final QAUser aUser = new QAUser("aUser");
 
     public final StringPath email = createString("email");
 
@@ -31,15 +31,15 @@ public class QUserAbstr extends EntityPathBase<AUser> {
 
     public final EnumPath<booking_site.xws_proj.domain.enums.Role> role = createEnum("role", booking_site.xws_proj.domain.enums.Role.class);
 
-    public QUserAbstr(String variable) {
+    public QAUser(String variable) {
         super(AUser.class, forVariable(variable));
     }
 
-    public QUserAbstr(Path<? extends AUser> path) {
+    public QAUser(Path<? extends AUser> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QUserAbstr(PathMetadata metadata) {
+    public QAUser(PathMetadata metadata) {
         super(AUser.class, metadata);
     }
 

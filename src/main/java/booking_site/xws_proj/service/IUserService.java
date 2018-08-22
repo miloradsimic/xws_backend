@@ -8,8 +8,6 @@ import booking_site.xws_proj.domain.AUser;
 //TODO M: Pogledaj opet ovaj intefejs ako treba sta menjati
 public interface IUserService {
 
-	
-	//Ovo verovatno moze direktno iz repositorija, ali da bi napravili restrikcije trebamo redefinisati
 	//crud
 	boolean createUser(User user);
 	User findUser(long id);

@@ -21,7 +21,11 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
-    public final QUserAbstr _super = new QUserAbstr(this);
+    public final QAUser _super = new QAUser(this);
+
+    public final BooleanPath active = createBoolean("active");
+
+    public final BooleanPath deleted = createBoolean("deleted");
 
     //inherited
     public final StringPath email = _super.email;
