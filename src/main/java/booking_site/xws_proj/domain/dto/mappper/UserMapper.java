@@ -1,7 +1,6 @@
 package booking_site.xws_proj.domain.dto.mappper;
 
 import booking_site.xws_proj.domain.AUser;
-import booking_site.xws_proj.domain.User;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 
 public class UserMapper {
@@ -15,7 +14,6 @@ public class UserMapper {
 
 		dto.email = aUser.getEmail();
 		dto.name = aUser.getName();
-		dto.id = aUser.getId();
 		dto.role = aUser.getRoleString();
 
 		return dto;

@@ -75,7 +75,6 @@ public class Reservation {
 	public void setEmail_agent(String email_agent) {
 		this.email_agent = email_agent;
 	}
-	
 
 	public Date getEndTime() {
 		return endTime;

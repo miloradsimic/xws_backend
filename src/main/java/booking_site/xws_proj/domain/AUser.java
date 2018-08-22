@@ -12,11 +12,10 @@ import javax.persistence.TableGenerator;
 
 import booking_site.xws_proj.domain.enums.Role;
 
-
 @Entity
 // koncept jedna tabela po konkretnoj klasi
 @Inheritance(strategy = TABLE_PER_CLASS)
-public class AUser{	
+public class AUser {
 
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
@@ -36,7 +35,7 @@ public class AUser{
 
 	@Column(name = "role", nullable = false)
 	protected Role role;
-	
+
 	public AUser() {
 	}
 
@@ -83,7 +82,5 @@ public class AUser{
 	public String getRoleString() {
 		return role.toString();
 	}
-
-
 
 }

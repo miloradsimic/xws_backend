@@ -22,7 +22,7 @@ import booking_site.xws_proj.service.IAccommodationService;
 @RestController
 @RequestMapping("/accommodation")
 public class AccommodationController {
-	
+
 	@Autowired
 	private IAccommodationService accommodationService;
 
@@ -33,7 +33,8 @@ public class AccommodationController {
 	 * @return AccommodationResponseDTO or ErrorResponse object (unimplemented)
 	 */
 	@RequestMapping(path = "/new", method = RequestMethod.POST)
-	public ResponseEntity<Object> create(@RequestHeader("Authorization") String encoded, @RequestBody AccommodationRequestDTO requestDto) {
+	public ResponseEntity<Object> create(@RequestHeader("Authorization") String encoded,
+			@RequestBody AccommodationRequestDTO requestDto) {
 		AUser anyUser;
 		ResponseErrorHandler errorResponse;
 
@@ -44,19 +45,18 @@ public class AccommodationController {
 			errorResponse = new ResponseErrorHandler();
 			errorResponse.setErrorMessage("You have to be logged to make a reservation.");
 			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-		} if (anyUser.getRole() != Role.AGENT) {
+		}
+		if (anyUser.getRole() != Role.AGENT) {
 			errorResponse = new ResponseErrorHandler();
 			errorResponse.setErrorMessage("Only agents are authorizated for this action.");
 			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 		} // else successful login
-		
+
 		Accommodation entry = AccommendationMapper.mapDtoIntoEntity(requestDto);
 		accommodationService.create(entry);
-		
+
 		return new ResponseEntity<Object>(AccommendationMapper.mapEntityIntoDTO(entry), HttpStatus.CREATED);
-		
+
 	}
-	
-	
 
 }

@@ -43,9 +43,6 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private AdminRepository adminRepository;
-
 	@RequestMapping(path = "/users", method = RequestMethod.GET)
 	public ResponseEntity<List<User>> readUsers() {
 		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
@@ -133,24 +130,28 @@ public class UserController {
 			errorResponse.setErrorMessage("You have to be logged to update user.");
 			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
 
-		} if (!user.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
+		}
+		if (!user.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
 			errorResponse = new UserResponseDTO();
 			errorResponse.setErrorMessage("You can update only your account.");
 			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
 
-		} if (user.isActive() != userDTO.isActive() || user.isDeleted() != userDTO.isDeleted() || userDTO.getRole() != Role.USER) {
+		}
+		if (user.isActive() != userDTO.isActive() || user.isDeleted() != userDTO.isDeleted()
+				|| userDTO.getRole() != Role.USER) {
 			errorResponse = new UserResponseDTO();
 			errorResponse.setErrorMessage("Only admins can delete and block users.");
 			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
-		}// else successful login
+		} // else successful login
 
 		userDTO.setId(user.getId());
 		userService.updateUser(userDTO);
-		
-		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())), HttpStatus.OK);
 
-	}	
-	
+		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())),
+				HttpStatus.OK);
+
+	}
+
 	@RequestMapping(path = "/user/{id}/{action}", method = RequestMethod.PUT)
 	public ResponseEntity<ResponseErrorHandler> blockUser(@RequestHeader("Authorization") String encoded,
 			@PathVariable("id") Long userId, @PathVariable Boolean action) {

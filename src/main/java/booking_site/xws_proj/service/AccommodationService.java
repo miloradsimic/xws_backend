@@ -28,7 +28,7 @@ public class AccommodationService implements IAccommodationService {
 
 	@Override
 	public boolean update(Accommodation entry) {
-		if(accommodationRepository.exists(entry.getId())) {
+		if (accommodationRepository.exists(entry.getId())) {
 			accommodationRepository.save(entry);
 			return true;
 		}
@@ -37,11 +37,11 @@ public class AccommodationService implements IAccommodationService {
 
 	@Override
 	public void delete(long id) {
-		if(accommodationRepository.exists(id)) {
+		if (accommodationRepository.exists(id)) {
 			Accommodation entry = accommodationRepository.findOne(id);
 			entry.setDeleted(true);
 			accommodationRepository.save(entry);
-		}	
+		}
 	}
 
 	@Override

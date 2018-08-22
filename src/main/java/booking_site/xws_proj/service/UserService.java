@@ -11,15 +11,14 @@ import booking_site.xws_proj.repository.UserRepository;
 
 @Service
 public class UserService implements IUserService {
-	
 
 	@Autowired
 	private UserRepository userRepository;
 
-	//crud metode
+	// crud metode
 	@Override
 	public boolean createUser(User user) {
-		if(userRepository.findByEmail(user.getEmail()) != null) {
+		if (userRepository.findByEmail(user.getEmail()) != null) {
 			return false;
 		}
 		userRepository.save(user);
@@ -33,7 +32,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean updateUser(User user) {
-		if(userRepository.exists(user.getId())) {
+		if (userRepository.exists(user.getId())) {
 			userRepository.save(user);
 			return true;
 		}
@@ -42,13 +41,14 @@ public class UserService implements IUserService {
 
 	@Override
 	public void deleteUser(long id) {
-		if(userRepository.exists(id)) {
+		if (userRepository.exists(id)) {
 			User user = userRepository.findOne(id);
 			user.setDeleted(true);
 			userRepository.save(user);
 		}
 	}
-	//ostalo
+
+	// ostalo
 	@Override
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
@@ -58,7 +58,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean blockUser(long id, boolean action) {
-		if(userRepository.exists(id)) {
+		if (userRepository.exists(id)) {
 			User user = userRepository.findOne(id);
 			user.setActive(action);
 			userRepository.save(user);
@@ -67,30 +67,4 @@ public class UserService implements IUserService {
 		return false;
 	}
 
-		
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

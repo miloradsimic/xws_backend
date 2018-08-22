@@ -15,7 +15,6 @@ import booking_site.xws_proj.domain.dto.mappper.UserMapper;
 import booking_site.xws_proj.domain.dto.request.UserLoginRequestDTO;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 import booking_site.xws_proj.repository.AUserRepository;
-import booking_site.xws_proj.repository.UserRepository;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,7 +28,7 @@ public class AuthenticationController {
 			HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
 				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.email, user.password));
-		
+
 		if (userResponse == null) {
 			userResponse = new UserResponseDTO();
 			userResponse.setErrorMessage("Wrong credentials.");

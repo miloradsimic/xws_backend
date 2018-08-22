@@ -11,7 +11,7 @@ import javax.persistence.TableGenerator;
 @Entity
 @Table(name = "tbl_accommodation")
 public class Accommodation {
-	
+
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
@@ -26,8 +26,8 @@ public class Accommodation {
 	private double price;
 	@Column(nullable = false)
 	private boolean deleted;
-	
-	public Accommodation(){
+
+	public Accommodation() {
 		deleted = false;
 	}
 
@@ -70,6 +70,5 @@ public class Accommodation {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	
+
 }
