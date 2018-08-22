@@ -14,7 +14,7 @@ import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.dto.mappper.AccommendationMapper;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
-import booking_site.xws_proj.domain.dto.response.ResponseErrorHandler;
+import booking_site.xws_proj.domain.dto.response.ErrorResponse;
 import booking_site.xws_proj.domain.enums.Role;
 import booking_site.xws_proj.repository.AUserRepository;
 import booking_site.xws_proj.service.IAccommodationService;
@@ -36,19 +36,18 @@ public class AccommodationController {
 	public ResponseEntity<Object> create(@RequestHeader("Authorization") String encoded,
 			@RequestBody AccommodationRequestDTO requestDto) {
 		AUser anyUser;
-		ResponseErrorHandler errorResponse;
 
 		// check auth and autorization
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((anyUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			errorResponse = new ResponseErrorHandler();
-			errorResponse.setErrorMessage("You have to be logged to make a reservation.");
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("You have to be logged to make a reservation.");
 			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 		}
 		if (anyUser.getRole() != Role.AGENT) {
-			errorResponse = new ResponseErrorHandler();
-			errorResponse.setErrorMessage("Only agents are authorizated for this action.");
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("Only agents are authorizated for this action.");
 			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 		} // else successful login
 

@@ -1,6 +1,6 @@
 package booking_site.xws_proj.domain.dto.response;
 
-public class AccommodationResponseDTO extends ResponseErrorHandler {
+public class AccommodationResponseDTO {
 
 	private String id_agent;
 	private String description;

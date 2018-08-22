@@ -2,12 +2,11 @@ package booking_site.xws_proj.domain.dto.response;
 
 import java.util.Date;
 
-public class ReservationResponseDTO extends ResponseErrorHandler {
+public class ReservationResponseDTO {
 
 	public long id;
 	public String user_email;
 	public String agent_email;
-
 	public Date start_time;
 	public Date end_time;
 	public String address;

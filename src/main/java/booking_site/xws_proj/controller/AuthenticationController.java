@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import booking_site.xws_proj.AppUtils;
 import booking_site.xws_proj.domain.dto.mappper.UserMapper;
 import booking_site.xws_proj.domain.dto.request.UserLoginRequestDTO;
+import booking_site.xws_proj.domain.dto.response.ErrorResponse;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 import booking_site.xws_proj.repository.AUserRepository;
 
@@ -23,20 +24,23 @@ public class AuthenticationController {
 	@Autowired
 	private AUserRepository repository;
 
+	/*
+	 * @return UserResponseDTO or ErrorResponse object
+	 */
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	public ResponseEntity<UserResponseDTO> tryToLogin(@RequestBody UserLoginRequestDTO user,
+	public ResponseEntity<Object> tryToLogin(@RequestBody UserLoginRequestDTO user,
 			HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
 				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.email, user.password));
 
 		if (userResponse == null) {
-			userResponse = new UserResponseDTO();
-			userResponse.setErrorMessage("Wrong credentials.");
-			return new ResponseEntity<UserResponseDTO>(userResponse, HttpStatus.UNAUTHORIZED);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("Wrong credentials.");
+			return new ResponseEntity<Object>(userResponse, HttpStatus.UNAUTHORIZED);
 		}
 
 		response.setHeader("Authorization", AppUtils.encryptBasic(user.email, user.password));
-		return new ResponseEntity<UserResponseDTO>(userResponse, HttpStatus.OK);
+		return new ResponseEntity<Object>(userResponse, HttpStatus.OK);
 
 	}
 

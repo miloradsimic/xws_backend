@@ -22,7 +22,7 @@ import booking_site.xws_proj.domain.dto.mappper.UserMapper;
 import booking_site.xws_proj.domain.dto.request.ReservationDTO;
 import booking_site.xws_proj.domain.dto.request.UserRegisterRequestDTO;
 import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
-import booking_site.xws_proj.domain.dto.response.ResponseErrorHandler;
+import booking_site.xws_proj.domain.dto.response.ErrorResponse;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
 import booking_site.xws_proj.repository.AUserRepository;
@@ -47,23 +47,27 @@ public class UserController {
 	public ResponseEntity<List<User>> readUsers() {
 		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
 	}
-
+	/*
+	 * @return UserResponseDTO or ErrorResponse object
+	 */
 	@RequestMapping(path = "/register", method = RequestMethod.POST)
-	public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRegisterRequestDTO userDto,
+	public ResponseEntity<Object> createUser(@RequestBody UserRegisterRequestDTO userDto,
 			HttpServletResponse response) {
 		User user = new User(userDto);
 		if (userService.createUser(user)) {
 			response.setHeader("Authorization", AppUtils.encryptBasic(user.getEmail(), user.getPassword()));
-			return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(user), HttpStatus.CREATED);
+			return new ResponseEntity<Object>(UserMapper.mapEntityIntoDTO(user), HttpStatus.CREATED);
 		}
-		UserResponseDTO userResponse = new UserResponseDTO();
-		userResponse.setErrorMessage("The email is already registered. Try another one!");
-		return new ResponseEntity<UserResponseDTO>(userResponse, HttpStatus.CONFLICT);
+		ErrorResponse errorResponse = new ErrorResponse();
+		errorResponse.setError("The email is already registered. Try another one!");
+		return new ResponseEntity<Object>(errorResponse, HttpStatus.CONFLICT);
 
 	}
-
+	/*
+	 * @return ReservationResponseDTO or ErrorResponse object
+	 */
 	@RequestMapping(path = "/reservation", method = RequestMethod.POST)
-	public ResponseEntity<ReservationResponseDTO> makeAReservation(@RequestHeader("Authorization") String encoded,
+	public ResponseEntity<Object> makeAReservatiosn(@RequestHeader("Authorization") String encoded,
 			@RequestBody ReservationDTO reservationDTO) {
 		ReservationResponseDTO reservationResponse;
 		User user;
@@ -71,9 +75,9 @@ public class UserController {
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((user = userRepository.findByEmailAndPassword(username, password)) == null) {
-			reservationResponse = new ReservationResponseDTO();
-			reservationResponse.setErrorMessage("You have to be logged to make a reservation.");
-			return new ResponseEntity<ReservationResponseDTO>(reservationResponse, HttpStatus.UNAUTHORIZED);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("You have to be logged to make a reservation.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		} // else successful login
 
@@ -86,29 +90,30 @@ public class UserController {
 		reservationResponse.setAgent_email("email@email.com2");
 		reservationResponse.setStart_time(new Date());
 		reservationResponse.setEnd_time(new Date());
-		return new ResponseEntity<ReservationResponseDTO>(reservationResponse, HttpStatus.OK);
+		return new ResponseEntity<Object>(reservationResponse, HttpStatus.OK);
 
 	}
-
+	/*
+	 * @return Nothing or ErrorResponse object
+	 */
 	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<ResponseErrorHandler> deleteUser(@RequestHeader("Authorization") String encoded,
+	public ResponseEntity<Object> deleteUser(@RequestHeader("Authorization") String encoded,
 			@PathVariable("id") Long userId) {
-		ResponseErrorHandler errorResponse;
 		AUser admin;
 
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			errorResponse = new ResponseErrorHandler();
-			errorResponse.setErrorMessage("You have to be logged to delete user.");
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("You have to be logged to delete user.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		}
 		if (admin.getRole() != Role.ADMIN) {
-			errorResponse = new ResponseErrorHandler();
-			errorResponse.setErrorMessage("Only admins have privs to delete users.");
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("Only admins have privs to delete users.");
 			// Ili FORBIDEN ili nesto drugo??
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		} // else successful login
 
@@ -116,68 +121,70 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
-
+	/*
+	 * @return UserResponseDTO or ErrorResponse object
+	 */
 	@RequestMapping(path = "/user", method = RequestMethod.PUT)
-	public ResponseEntity<UserResponseDTO> updateUser(@RequestHeader("Authorization") String encoded,
+	public ResponseEntity<Object> updateUser(@RequestHeader("Authorization") String encoded,
 			@RequestBody User userDTO) {
-		UserResponseDTO errorResponse;
 		User user;
 
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((user = userRepository.findByEmailAndPassword(username, password)) == null) {
-			errorResponse = new UserResponseDTO();
-			errorResponse.setErrorMessage("You have to be logged to update user.");
-			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("You have to be logged to update user.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		}
 		if (!user.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
-			errorResponse = new UserResponseDTO();
-			errorResponse.setErrorMessage("You can update only your account.");
-			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("You can update only your account.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		}
 		if (user.isActive() != userDTO.isActive() || user.isDeleted() != userDTO.isDeleted()
 				|| userDTO.getRole() != Role.USER) {
-			errorResponse = new UserResponseDTO();
-			errorResponse.setErrorMessage("Only admins can delete and block users.");
-			return new ResponseEntity<UserResponseDTO>(errorResponse, HttpStatus.UNAUTHORIZED);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("Only admins can delete and block users.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 		} // else successful login
 
 		userDTO.setId(user.getId());
 		userService.updateUser(userDTO);
 
-		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())),
+		return new ResponseEntity<Object>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())),
 				HttpStatus.OK);
 
 	}
-
+	/*
+	 * @return Nothing or ErrorResponse object
+	 */
 	@RequestMapping(path = "/user/{id}/{action}", method = RequestMethod.PUT)
-	public ResponseEntity<ResponseErrorHandler> blockUser(@RequestHeader("Authorization") String encoded,
+	public ResponseEntity<Object> blockUser(@RequestHeader("Authorization") String encoded,
 			@PathVariable("id") Long userId, @PathVariable Boolean action) {
-		ResponseErrorHandler errorResponse;
 		AUser admin;
 
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			errorResponse = new ResponseErrorHandler();
-			errorResponse.setErrorMessage("You have to be logged to manage users.");
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("You have to be logged to manage users.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		}
 		if (admin.getRole() != Role.ADMIN) {
-			errorResponse = new ResponseErrorHandler();
-			errorResponse.setErrorMessage("Only admins have privs to manage users.");
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("Only admins have privs to manage users.");
 			// Ili FROBIDEN ili nesto drugo??
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
 		} // else successful login
 
 		if (!userService.blockUser(userId, action)) {
-			errorResponse = new ResponseErrorHandler();
-			errorResponse.setErrorMessage("User doesn't exit.");
-			return new ResponseEntity<ResponseErrorHandler>(errorResponse, HttpStatus.NOT_FOUND);
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("User doesn't exit.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
