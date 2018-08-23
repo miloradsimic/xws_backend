@@ -7,6 +7,10 @@ public class AppUtils {
 
 	public static String getUsernameFromBasic(String encoded) {
 
+		if (encoded == null || !encoded.startsWith("Basic")) {
+			return "";
+		}
+
 		String base64 = encoded.substring(encoded.indexOf(" ") + 1, encoded.length());
 
 		String decoded = new String(Base64.getDecoder().decode(base64));
@@ -17,6 +21,10 @@ public class AppUtils {
 	}
 
 	public static String getPasswordFromBasic(String encoded) {
+
+		if (encoded == null || !encoded.startsWith("Basic")) {
+			return "";
+		}
 
 		String base64 = encoded.substring(encoded.indexOf(" ") + 1, encoded.length());
 

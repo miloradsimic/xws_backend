@@ -28,8 +28,7 @@ public class AuthenticationController {
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	public ResponseEntity<Object> tryToLogin(@RequestBody UserLoginRequestDTO user,
-			HttpServletResponse response) {
+	public ResponseEntity<Object> tryToLogin(@RequestBody UserLoginRequestDTO user, HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
 				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
 

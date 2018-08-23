@@ -2,12 +2,13 @@ package booking_site.xws_proj.controller;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,11 +42,11 @@ public class AccommodationController {
 	 * @return AccommodationResponseDTO or ErrorResponse object (unimplemented)
 	 */
 	@RequestMapping(path = "/accommodation", method = RequestMethod.POST)
-	public ResponseEntity<Object> create(@RequestHeader("Authorization") String encoded,
-			@RequestBody AccommodationRequestDTO requestDto) {
+	public ResponseEntity<Object> create(HttpServletRequest request, @RequestBody AccommodationRequestDTO requestDto) {
 		AUser anyUser;
 
 		// check auth and autorization
+		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((anyUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
@@ -99,10 +100,10 @@ public class AccommodationController {
 	 * @return AccommodationResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/accommodation", method = RequestMethod.PUT)
-	public ResponseEntity<Object> update(@RequestHeader("Authorization") String encoded,
-			@RequestBody AccommodationRequestDTO requestDto) {
+	public ResponseEntity<Object> update(HttpServletRequest request, @RequestBody AccommodationRequestDTO requestDto) {
 		AUser agent;
 
+		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((agent = aUserRepository.findByEmailAndPassword(username, password)) == null) {
@@ -135,10 +136,10 @@ public class AccommodationController {
 	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/accommodation/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> delete(@RequestHeader("Authorization") String encoded,
-			@PathVariable("id") Long accommodationId) {
+	public ResponseEntity<Object> delete(HttpServletRequest request, @PathVariable("id") Long accommodationId) {
 		AUser agent;
 
+		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((agent = aUserRepository.findByEmailAndPassword(username, password)) == null) {
@@ -163,11 +164,12 @@ public class AccommodationController {
 	 * @return ReservationResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/reservation", method = RequestMethod.POST)
-	public ResponseEntity<Object> makeAReservatiosn(@RequestHeader("Authorization") String encoded,
+	public ResponseEntity<Object> makeAReservatiosn(HttpServletRequest request,
 			@RequestBody ReservationDTO reservationDTO) {
 		ReservationResponseDTO reservationResponse;
 		AUser aUser;
 
+		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {

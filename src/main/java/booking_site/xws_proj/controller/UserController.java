@@ -2,6 +2,7 @@ package booking_site.xws_proj.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,9 +81,10 @@ public class UserController {
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user", method = RequestMethod.PUT)
-	public ResponseEntity<Object> update(@RequestHeader("Authorization") String encoded, @RequestBody User userDTO) {
+	public ResponseEntity<Object> update(HttpServletRequest request, @RequestBody User userDTO) {
 		User user;
 
+		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((user = userRepository.findByEmailAndPassword(username, password)) == null) {
@@ -118,10 +119,10 @@ public class UserController {
 	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> delete(@RequestHeader("Authorization") String encoded,
-			@PathVariable("id") Long userId) {
+	public ResponseEntity<Object> delete(HttpServletRequest request, @PathVariable("id") Long userId) {
 		AUser admin;
 
+		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
@@ -150,10 +151,11 @@ public class UserController {
 	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user/{id}/{action}", method = RequestMethod.PUT)
-	public ResponseEntity<Object> blockUser(@RequestHeader("Authorization") String encoded,
-			@PathVariable("id") Long userId, @PathVariable Boolean action) {
+	public ResponseEntity<Object> blockUser(HttpServletRequest request, @PathVariable("id") Long userId,
+			@PathVariable Boolean action) {
 		AUser admin;
 
+		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
