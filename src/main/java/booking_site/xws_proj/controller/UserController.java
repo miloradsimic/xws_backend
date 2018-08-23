@@ -1,6 +1,5 @@
 package booking_site.xws_proj.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,10 +18,9 @@ import booking_site.xws_proj.AppUtils;
 import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.User;
 import booking_site.xws_proj.domain.dto.mappper.UserMapper;
-import booking_site.xws_proj.domain.dto.request.ReservationDTO;
 import booking_site.xws_proj.domain.dto.request.UserRegisterRequestDTO;
 import booking_site.xws_proj.domain.dto.response.ErrorResponse;
-import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
+import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
 import booking_site.xws_proj.repository.AUserRepository;
 import booking_site.xws_proj.repository.UserRepository;
@@ -41,17 +39,13 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@RequestMapping(path = "/users", method = RequestMethod.GET)
-	public ResponseEntity<List<User>> readUsers() {
-		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
-	}
-
 	/*
+	 * Create
+	 * 
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/register", method = RequestMethod.POST)
-	public ResponseEntity<Object> createUser(@RequestBody UserRegisterRequestDTO userDto,
-			HttpServletResponse response) {
+	public ResponseEntity<Object> create(@RequestBody UserRegisterRequestDTO userDto, HttpServletResponse response) {
 		User user;
 		if ((user = userService.createUser(new User(userDto))) == null) {
 			ErrorResponse errorResponse = new ErrorResponse();
@@ -63,71 +57,31 @@ public class UserController {
 	}
 
 	/*
-	 * @return ReservationResponseDTO or ErrorResponse object
+	 * Read one
 	 */
-	@RequestMapping(path = "/reservation", method = RequestMethod.POST)
-	public ResponseEntity<Object> makeAReservatiosn(@RequestHeader("Authorization") String encoded,
-			@RequestBody ReservationDTO reservationDTO) {
-		ReservationResponseDTO reservationResponse;
-		User user;
-
-		String username = AppUtils.getUsernameFromBasic(encoded);
-		String password = AppUtils.getPasswordFromBasic(encoded);
-		if ((user = userRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to make a reservation.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
-		} // else successful login
-
-		// TODO: Unimplemented!!! check if user is reserving for himself
-		// try to reserve, receive feedback message or error, forward to client
-		// through retVal
-		reservationResponse = new ReservationResponseDTO();
-		reservationResponse.setUser_email("email@email.com");
-		reservationResponse.setId(1000);
-		reservationResponse.setAgent_email("email@email.com2");
-		reservationResponse.setStart_time(new Date());
-		reservationResponse.setEnd_time(new Date());
-		return new ResponseEntity<Object>(reservationResponse, HttpStatus.OK);
-
+	@RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
+	public ResponseEntity<UserResponseDTO> readOne(@PathVariable("id") Long id) {
+		// TODO M: Use predicate to exclude passwords
+		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(userService.findUser(id)),
+				HttpStatus.OK);
 	}
 
 	/*
-	 * @return Nothing or ErrorResponse object
+	 * Read all
 	 */
-	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteUser(@RequestHeader("Authorization") String encoded,
-			@PathVariable("id") Long userId) {
-		AUser admin;
-
-		String username = AppUtils.getUsernameFromBasic(encoded);
-		String password = AppUtils.getPasswordFromBasic(encoded);
-		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to delete user.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
-		}
-		if (admin.getRole() != Role.ADMIN) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Only admins have privs to delete users.");
-			// Ili FORBIDEN ili nesto drugo??
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
-		} // else successful login
-
-		userService.deleteUser(userId);
-		return new ResponseEntity<>(HttpStatus.OK);
-
+	@RequestMapping(path = "/users", method = RequestMethod.GET)
+	public ResponseEntity<List<User>> readAll() {
+		// TODO M: Use predicate to exclude passwords
+		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
 	}
 
 	/*
+	 * Update
+	 * 
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user", method = RequestMethod.PUT)
-	public ResponseEntity<Object> updateUser(@RequestHeader("Authorization") String encoded,
-			@RequestBody User userDTO) {
+	public ResponseEntity<Object> update(@RequestHeader("Authorization") String encoded, @RequestBody User userDTO) {
 		User user;
 
 		String username = AppUtils.getUsernameFromBasic(encoded);
@@ -149,9 +103,8 @@ public class UserController {
 			ErrorResponse errorResponse = new ErrorResponse();
 			errorResponse.setError("Only admins can delete and block users.");
 			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-		} // else successful login
+		} // else permission granted
 
-		userDTO.setId(user.getId());
 		userService.updateUser(userDTO);
 
 		return new ResponseEntity<Object>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())),
@@ -160,6 +113,40 @@ public class UserController {
 	}
 
 	/*
+	 * Delete
+	 * 
+	 * @return Nothing or ErrorResponse object
+	 */
+	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Object> delete(@RequestHeader("Authorization") String encoded,
+			@PathVariable("id") Long userId) {
+		AUser admin;
+
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("You have to be logged to delete user.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+		}
+		if (admin.getRole() != Role.ADMIN) {
+			ErrorResponse errorResponse = new ErrorResponse();
+			errorResponse.setError("Only admins have privs to delete users.");
+			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+		} // else permission granted
+
+		userService.deleteUser(userId);
+		return new ResponseEntity<>(HttpStatus.OK);
+
+	}
+
+	/*
+	 * Block or Activate
+	 * 
+	 * @param action: true for block user; false for activate user
+	 * 
 	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user/{id}/{action}", method = RequestMethod.PUT)
@@ -178,10 +165,9 @@ public class UserController {
 		if (admin.getRole() != Role.ADMIN) {
 			ErrorResponse errorResponse = new ErrorResponse();
 			errorResponse.setError("Only admins have privs to manage users.");
-			// Ili FROBIDEN ili nesto drugo??
 			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
 
-		} // else successful login
+		} // else permission granted
 
 		if (!userService.blockUser(userId, action)) {
 			ErrorResponse errorResponse = new ErrorResponse();

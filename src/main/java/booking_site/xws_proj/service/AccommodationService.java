@@ -16,9 +16,9 @@ public class AccommodationService implements IAccommodationService {
 	private AccommodationRepository accommodationRepository;
 
 	@Override
-	public boolean create(Accommodation entry) {
-		accommodationRepository.save(entry);
-		return true;
+	public Accommodation create(Accommodation entry) {
+		return accommodationRepository.save(entry);
+		
 	}
 
 	@Override

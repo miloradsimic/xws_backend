@@ -4,7 +4,7 @@ import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
 import booking_site.xws_proj.domain.dto.response.AccommodationResponseDTO;
 
-public class AccommendationMapper {
+public class AccommodationMapper {
 
 	public static AccommodationResponseDTO mapEntityIntoDTO(Accommodation entity) {
 
@@ -13,6 +13,7 @@ public class AccommendationMapper {
 		}
 		AccommodationResponseDTO dto = new AccommodationResponseDTO();
 
+		dto.setId(entity.getId());
 		dto.setId_agent(entity.getIdAgent());
 		dto.setDescription(entity.getDescription());
 		dto.setPrice(entity.getPrice());
@@ -27,6 +28,7 @@ public class AccommendationMapper {
 		}
 		Accommodation entity = new Accommodation();
 
+		entity.setId(dto.getId());
 		entity.setIdAgent(dto.getId_agent());
 		entity.setDescription(dto.getDescription());
 		entity.setPrice(dto.getPrice());

@@ -7,7 +7,7 @@ import booking_site.xws_proj.domain.Accommodation;
 public interface IAccommodationService {
 
 	// crud
-	boolean create(Accommodation entry);
+	Accommodation create(Accommodation entry);
 
 	Accommodation find(long id);
 

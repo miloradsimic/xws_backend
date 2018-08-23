@@ -51,6 +51,7 @@ public class UserService implements IUserService {
 	@Override
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
+		//TODO M: Use predicates here!!!
 		userRepository.findAll().forEach(e -> list.add(e));
 		return list;
 	}
