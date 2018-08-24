@@ -1,6 +1,8 @@
 package booking_site.xws_proj.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,13 +16,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import booking_site.xws_proj.AppUtils;
+import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
+import booking_site.xws_proj.controller.exceptions.NotFoundException;
+import booking_site.xws_proj.controller.exceptions.NotLoggedException;
 import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.dto.mappper.AccommodationMapper;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.ReservationDTO;
 import booking_site.xws_proj.domain.dto.response.AccommodationResponseDTO;
-import booking_site.xws_proj.domain.dto.response.ErrorResponse;
 import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
 import booking_site.xws_proj.repository.AUserRepository;
@@ -42,7 +46,8 @@ public class AccommodationController {
 	 * @return AccommodationResponseDTO or ErrorResponse object (unimplemented)
 	 */
 	@RequestMapping(path = "/accommodation", method = RequestMethod.POST)
-	public ResponseEntity<Object> create(HttpServletRequest request, @RequestBody AccommodationRequestDTO requestDto) {
+	public ResponseEntity<AccommodationResponseDTO> create(HttpServletRequest request,
+			@RequestBody AccommodationRequestDTO requestDto) {
 		AUser anyUser;
 
 		// check auth and autorization
@@ -50,21 +55,17 @@ public class AccommodationController {
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((anyUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to make a reservation.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotLoggedException();
 		}
 		if (anyUser.getRole() != Role.AGENT) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Only agents are authorizated for this action.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotAuthorizedException();
 		} // else permission granted
 
 		Accommodation entry = AccommodationMapper.mapDtoIntoEntity(requestDto);
 		AccommodationResponseDTO responseObject = AccommodationMapper
 				.mapEntityIntoDTO(accommodationService.create(entry));
 
-		return new ResponseEntity<Object>(responseObject, HttpStatus.CREATED);
+		return new ResponseEntity<AccommodationResponseDTO>(responseObject, HttpStatus.CREATED);
 	}
 
 	/*
@@ -73,14 +74,13 @@ public class AccommodationController {
 	 * @return AccommodationResponseDTO
 	 */
 	@RequestMapping(path = "/accommodation/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> readOne(@PathVariable("id") Long accommodationId) {
-		Accommodation responseObject;
-		if ((responseObject = accommodationService.find(accommodationId)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Not found.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.NOT_FOUND);
+	public ResponseEntity<AccommodationResponseDTO> readOne(@PathVariable("id") Long accommodationId) {
+		AccommodationResponseDTO responseObject;
+		if ((responseObject = AccommodationMapper
+				.mapEntityIntoDTO(accommodationService.find(accommodationId))) == null) {
+			throw new NotFoundException();
 		}
-		return new ResponseEntity<Object>(responseObject, HttpStatus.OK);
+		return new ResponseEntity<AccommodationResponseDTO>(responseObject, HttpStatus.OK);
 	}
 
 	/*
@@ -89,8 +89,10 @@ public class AccommodationController {
 	 * @return List<AccommodationResponseDTO>
 	 */
 	@RequestMapping(path = "/accommodations", method = RequestMethod.GET)
-	public ResponseEntity<Object> readAll() {
-		return new ResponseEntity<Object>(accommodationService.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<AccommodationResponseDTO>> readAll() {
+		List<AccommodationResponseDTO> list = new ArrayList<>();
+		accommodationService.findAll().forEach(e -> list.add(AccommodationMapper.mapEntityIntoDTO(e)));
+		return new ResponseEntity<List<AccommodationResponseDTO>>(list, HttpStatus.OK);
 
 	}
 
@@ -100,33 +102,28 @@ public class AccommodationController {
 	 * @return AccommodationResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/accommodation", method = RequestMethod.PUT)
-	public ResponseEntity<Object> update(HttpServletRequest request, @RequestBody AccommodationRequestDTO requestDto) {
+	public ResponseEntity<AccommodationResponseDTO> update(HttpServletRequest request,
+			@RequestBody AccommodationRequestDTO requestDto) {
 		AUser agent;
 
 		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((agent = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to update accommodation.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotLoggedException();
 		}
 		if (agent.getRole() != Role.AGENT) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Only agents can update accommodation.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotAuthorizedException();
 		}
 		if (agent.getId() != requestDto.getId()) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You can update only your accommodation.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotAuthorizedException("You can update only your accommodation.");
 		} // else permission granted
 
 		Accommodation entry = AccommodationMapper.mapDtoIntoEntity(requestDto);
 		AccommodationResponseDTO responseObject = AccommodationMapper
 				.mapEntityIntoDTO(accommodationService.update(entry));
 
-		return new ResponseEntity<Object>(responseObject, HttpStatus.OK);
+		return new ResponseEntity<AccommodationResponseDTO>(responseObject, HttpStatus.OK);
 
 	}
 
@@ -136,21 +133,18 @@ public class AccommodationController {
 	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/accommodation/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> delete(HttpServletRequest request, @PathVariable("id") Long accommodationId) {
+	public ResponseEntity<AccommodationResponseDTO> delete(HttpServletRequest request,
+			@PathVariable("id") Long accommodationId) {
 		AUser agent;
 
 		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((agent = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to delete accommodation.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotLoggedException();
 		}
 		if (agent.getRole() != Role.AGENT) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Only agents have privs to delete accommodations.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotAuthorizedException();
 		} // else permission granted
 			// TODO M: If there is any reservation in future, disable option
 		accommodationService.delete(accommodationId);
@@ -173,9 +167,7 @@ public class AccommodationController {
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to make a reservation.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotLoggedException();
 
 		} // else permission granted
 

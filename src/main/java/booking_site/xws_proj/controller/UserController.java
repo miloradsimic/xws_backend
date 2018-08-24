@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import booking_site.xws_proj.AppUtils;
+import booking_site.xws_proj.controller.exceptions.AlreadyExistsException;
+import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
+import booking_site.xws_proj.controller.exceptions.NotFoundException;
+import booking_site.xws_proj.controller.exceptions.NotLoggedException;
 import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.User;
 import booking_site.xws_proj.domain.dto.mappper.UserMapper;
 import booking_site.xws_proj.domain.dto.request.UserRegisterRequestDTO;
-import booking_site.xws_proj.domain.dto.response.ErrorResponse;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
 import booking_site.xws_proj.repository.AUserRepository;
@@ -45,15 +48,14 @@ public class UserController {
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/register", method = RequestMethod.POST)
-	public ResponseEntity<Object> create(@RequestBody UserRegisterRequestDTO userDto, HttpServletResponse response) {
+	public ResponseEntity<UserResponseDTO> create(@RequestBody UserRegisterRequestDTO userDto,
+			HttpServletResponse response) {
 		User user;
 		if ((user = userService.createUser(new User(userDto))) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("The email is already registered. Try another one!");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.CONFLICT);
+			throw new AlreadyExistsException();
 		}
 		response.setHeader("Authorization", AppUtils.encryptBasic(user.getEmail(), user.getPassword()));
-		return new ResponseEntity<Object>(UserMapper.mapEntityIntoDTO(user), HttpStatus.CREATED);
+		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(user), HttpStatus.CREATED);
 	}
 
 	/*
@@ -81,34 +83,26 @@ public class UserController {
 	 * @return UserResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user", method = RequestMethod.PUT)
-	public ResponseEntity<Object> update(HttpServletRequest request, @RequestBody User userDTO) {
+	public ResponseEntity<UserResponseDTO> update(HttpServletRequest request, @RequestBody User userDTO) {
 		User user;
 
 		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((user = userRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to update user.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
+			throw new NotLoggedException();
 		}
 		if (!user.getEmail().equalsIgnoreCase(userDTO.getEmail())) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You can update only your account.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
+			throw new NotAuthorizedException();
 		}
 		if (user.isActive() != userDTO.isActive() || user.isDeleted() != userDTO.isDeleted()
 				|| userDTO.getRole() != Role.USER) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Only admins can delete and block users.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
+			throw new NotFoundException();
 		} // else permission granted
 
 		userService.updateUser(userDTO);
 
-		return new ResponseEntity<Object>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())),
+		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(userRepository.findOne(user.getId())),
 				HttpStatus.OK);
 
 	}
@@ -119,23 +113,17 @@ public class UserController {
 	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> delete(HttpServletRequest request, @PathVariable("id") Long userId) {
+	public ResponseEntity<Void> delete(HttpServletRequest request, @PathVariable("id") Long userId) {
 		AUser admin;
 
 		String encoded = request.getHeader("Authorization");
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to delete user.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
+			throw new NotLoggedException();
 		}
 		if (admin.getRole() != Role.ADMIN) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Only admins have privs to delete users.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
+			throw new NotAuthorizedException();
 		} // else permission granted
 
 		userService.deleteUser(userId);
@@ -151,7 +139,7 @@ public class UserController {
 	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user/{id}/{action}", method = RequestMethod.PUT)
-	public ResponseEntity<Object> blockUser(HttpServletRequest request, @PathVariable("id") Long userId,
+	public ResponseEntity<Void> blockUser(HttpServletRequest request, @PathVariable("id") Long userId,
 			@PathVariable Boolean action) {
 		AUser admin;
 
@@ -159,22 +147,14 @@ public class UserController {
 		String username = AppUtils.getUsernameFromBasic(encoded);
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((admin = aUserRepository.findByEmailAndPassword(username, password)) == null) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("You have to be logged to manage users.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
+			throw new NotLoggedException();
 		}
 		if (admin.getRole() != Role.ADMIN) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("Only admins have privs to manage users.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.UNAUTHORIZED);
-
+			throw new NotAuthorizedException();
 		} // else permission granted
 
 		if (!userService.blockUser(userId, action)) {
-			ErrorResponse errorResponse = new ErrorResponse();
-			errorResponse.setError("User doesn't exit.");
-			return new ResponseEntity<Object>(errorResponse, HttpStatus.NOT_FOUND);
+			throw new NotFoundException();
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

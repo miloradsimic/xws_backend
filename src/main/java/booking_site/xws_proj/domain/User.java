@@ -8,7 +8,7 @@ import booking_site.xws_proj.domain.enums.Role;
 
 @Entity
 @Table(name = "tbl_user")
-public class User extends AUser {
+public class User extends AClient {
 
 	public boolean deleted;
 	public boolean active;
