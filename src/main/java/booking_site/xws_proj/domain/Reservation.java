@@ -17,15 +17,15 @@ public class Reservation {
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
-	private long id;
+	private Long id;
 	@Column(nullable = false)
 	private String email;
 	@Column(nullable = false, name = "start_time")
 	private Date startTime;
 	@Column(nullable = false, name = "end_time")
 	private Date endTime;
-	@Column(nullable = false, name = "id_accommodation")
-	private long idAccommomdation;
+	@Column(nullable = false, name = "accommodation_id")
+	private long accommodationId;
 	@Column(nullable = false, name = "email_agent")
 	private String emailAgent;
 
@@ -33,11 +33,11 @@ public class Reservation {
 
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -49,12 +49,12 @@ public class Reservation {
 		this.email = email;
 	}
 
-	public long getIdAccommomdation() {
-		return idAccommomdation;
+	public long getAccommodationId() {
+		return accommodationId;
 	}
 
-	public void setIdAccommomdation(long idAccommomdation) {
-		this.idAccommomdation = idAccommomdation;
+	public void setAccommodationId(long accommodationId) {
+		this.accommodationId = accommodationId;
 	}
 
 	public String getEmailAgent() {

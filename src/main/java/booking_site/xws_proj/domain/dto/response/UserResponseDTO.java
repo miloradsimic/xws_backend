@@ -2,7 +2,7 @@ package booking_site.xws_proj.domain.dto.response;
 
 public class UserResponseDTO {
 
-	private long id;
+	private Long id;
 	private String email;
 	private String name;
 	private String role;
@@ -10,11 +10,11 @@ public class UserResponseDTO {
 	public UserResponseDTO() {
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

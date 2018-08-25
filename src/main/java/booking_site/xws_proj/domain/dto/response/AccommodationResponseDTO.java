@@ -2,28 +2,28 @@ package booking_site.xws_proj.domain.dto.response;
 
 public class AccommodationResponseDTO {
 
-	private long id;
-	private long id_agent;
+	private Long id;
+	private Long agent_id;
 	private String description;
 	private double price;
 
 	public AccommodationResponseDTO() {
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getId_agent() {
-		return id_agent;
+	public Long getAgent_id() {
+		return agent_id;
 	}
 
-	public void setId_agent(long id_agent) {
-		this.id_agent = id_agent;
+	public void setAgent_id(Long agent_id) {
+		this.agent_id = agent_id;
 	}
 
 	public String getDescription() {

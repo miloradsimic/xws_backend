@@ -175,9 +175,8 @@ public class AccommodationController {
 		// try to reserve, receive feedback message or error, forward to client
 		// through retVal
 		reservationResponse = new ReservationResponseDTO();
-		reservationResponse.setUser_email("email@email.com");
-		reservationResponse.setId(1000);
-		reservationResponse.setAgent_email("email@email.com2");
+		reservationResponse.setAgent_id(1000l);
+		reservationResponse.setId(1000l);
 		reservationResponse.setStart_time(new Date());
 		reservationResponse.setEnd_time(new Date());
 		return new ResponseEntity<Object>(reservationResponse, HttpStatus.OK);

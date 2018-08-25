@@ -20,7 +20,7 @@ public class AUser {
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
-	protected long id;
+	protected Long id;
 
 	@Column(nullable = false)
 	protected String email;

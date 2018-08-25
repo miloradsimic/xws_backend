@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class ReservationResponseDTO {
 
-	private long id;
-	private String user_email;
-	private String agent_email;
+	private Long id;
+	private Long user_id;
+	private Long agent_id;
 	private Date start_time;
 	private Date end_time;
 	private String address;
@@ -15,28 +15,28 @@ public class ReservationResponseDTO {
 		super();
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getUser_email() {
-		return user_email;
+	public Long getUser_id() {
+		return user_id;
 	}
 
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
 	}
 
-	public String getAgent_email() {
-		return agent_email;
+	public Long getAgent_id() {
+		return agent_id;
 	}
 
-	public void setAgent_email(String agent_email) {
-		this.agent_email = agent_email;
+	public void setAgent_id(Long agent_id) {
+		this.agent_id = agent_id;
 	}
 
 	public Date getStart_time() {

@@ -15,9 +15,9 @@ public class Accommodation {
 	@TableGenerator(name = "generator", initialValue = 10000)
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
-	private long id;
-	@Column(nullable = false, name = "id_agent")
-	private long idAgent;
+	private Long id;
+	@Column(nullable = false, name = "agent_id")
+	private long agentId;
 	@Column(nullable = false)
 	private String description;
 	@Column(nullable = false)
@@ -37,12 +37,12 @@ public class Accommodation {
 		this.id = id;
 	}
 
-	public long getIdAgent() {
-		return idAgent;
+	public long getAgentId() {
+		return agentId;
 	}
 
-	public void setIdAgent(long idAgent) {
-		this.idAgent = idAgent;
+	public void setAgentId(long agentId) {
+		this.agentId = agentId;
 	}
 
 	public String getDescription() {
