@@ -11,6 +11,8 @@ public class UserResponseDTO {
 	private String role;
 	@JsonInclude(Include.NON_NULL)
 	private Long tin;
+	@JsonInclude(Include.NON_NULL)
+	private boolean active;
 
 	public UserResponseDTO() {
 	}
@@ -45,6 +47,22 @@ public class UserResponseDTO {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public Long getTin() {
+		return tin;
+	}
+
+	public void setTin(Long tin) {
+		this.tin = tin;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

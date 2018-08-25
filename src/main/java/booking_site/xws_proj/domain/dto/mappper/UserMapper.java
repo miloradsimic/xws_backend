@@ -1,7 +1,10 @@
 package booking_site.xws_proj.domain.dto.mappper;
 
 import booking_site.xws_proj.domain.AUser;
+import booking_site.xws_proj.domain.Agent;
+import booking_site.xws_proj.domain.User;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
+import booking_site.xws_proj.domain.enums.Role;
 
 public class UserMapper {
 
@@ -16,6 +19,12 @@ public class UserMapper {
 		dto.setEmail(aUser.getEmail());
 		dto.setName(aUser.getName());
 		dto.setRole(aUser.getRoleString());
+		if (aUser.getRole() == Role.USER) {
+			dto.setActive(((User) aUser).isActive());
+		}
+		if (aUser.getRole() == Role.AGENT) {
+			dto.setTin(((Agent) aUser).getTin());
+		}
 
 		return dto;
 	}

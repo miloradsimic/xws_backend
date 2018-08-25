@@ -1,5 +1,6 @@
 package booking_site.xws_proj.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,9 +73,11 @@ public class UserController {
 	 * Read all
 	 */
 	@RequestMapping(path = "/users", method = RequestMethod.GET)
-	public ResponseEntity<List<User>> readAll() {
+	public ResponseEntity<List<UserResponseDTO>> readAll() {
 		// TODO M: Use predicate to exclude passwords
-		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
+		List<UserResponseDTO> list = new ArrayList<UserResponseDTO>();
+		userService.findAll().forEach(e -> list.add(UserMapper.mapEntityIntoDTO(e)));
+		return new ResponseEntity<List<UserResponseDTO>>(list, HttpStatus.OK);
 	}
 
 	/*
