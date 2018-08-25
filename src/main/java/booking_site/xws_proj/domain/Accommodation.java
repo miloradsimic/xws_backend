@@ -23,17 +23,16 @@ public class Accommodation {
 	@Column(nullable = false)
 	private double price;
 	@Column(nullable = false)
-	private boolean deleted;
+	private String address;
 
 	public Accommodation() {
-		deleted = false;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -61,12 +60,12 @@ public class Accommodation {
 		this.price = price;
 	}
 
-	public boolean isDeleted() {
-		return deleted;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

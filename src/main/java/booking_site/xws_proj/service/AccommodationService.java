@@ -38,7 +38,6 @@ public class AccommodationService implements IAccommodationService {
 	public void delete(long id) {
 		if (accommodationRepository.exists(id)) {
 			Accommodation entry = accommodationRepository.findOne(id);
-			entry.setDeleted(true);
 			accommodationRepository.save(entry);
 		}
 	}

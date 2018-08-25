@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import booking_site.xws_proj.domain.enums.Status;
+
 @Entity
 @Table(name = "tbl_reservation")
 public class Reservation {
@@ -18,19 +20,19 @@ public class Reservation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
 	private Long id;
-	@Column(nullable = false)
-	private String email;
+	@Column(nullable = false, name = "client_id")
+	private Long clientId;
+	@Column(nullable = false, name = "accommodation_id")
+	private long accommodationId;
 	@Column(nullable = false, name = "start_time")
 	private Date startTime;
 	@Column(nullable = false, name = "end_time")
 	private Date endTime;
-	@Column(nullable = false, name = "accommodation_id")
-	private long accommodationId;
-	@Column(nullable = false, name = "email_agent")
-	private String emailAgent;
-
+	@Column(nullable = false)
+	private Status status;
+	
 	public Reservation() {
-
+		status = Status.WAITING_FOR_APPROVAL;
 	}
 
 	public Long getId() {
@@ -41,12 +43,12 @@ public class Reservation {
 		this.id = id;
 	}
 
-	public String getEmail() {
-		return email;
+	public Long getClientId() {
+		return clientId;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setClientId(Long clientId) {
+		this.clientId = clientId;
 	}
 
 	public long getAccommodationId() {
@@ -55,14 +57,6 @@ public class Reservation {
 
 	public void setAccommodationId(long accommodationId) {
 		this.accommodationId = accommodationId;
-	}
-
-	public String getEmailAgent() {
-		return emailAgent;
-	}
-
-	public void setEmailAgent(String emailAgent) {
-		this.emailAgent = emailAgent;
 	}
 
 	public Date getStartTime() {

@@ -1,11 +1,16 @@
 package booking_site.xws_proj.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public class UserResponseDTO {
 
 	private Long id;
 	private String email;
 	private String name;
 	private String role;
+	@JsonInclude(Include.NON_NULL)
+	private Long tin;
 
 	public UserResponseDTO() {
 	}

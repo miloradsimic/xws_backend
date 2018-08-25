@@ -15,6 +15,7 @@ import booking_site.xws_proj.controller.exceptions.LoginFailedException;
 import booking_site.xws_proj.domain.dto.mappper.UserMapper;
 import booking_site.xws_proj.domain.dto.request.UserLoginRequestDTO;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
+import booking_site.xws_proj.domain.enums.Role;
 import booking_site.xws_proj.repository.AUserRepository;
 
 @RestController
@@ -25,13 +26,54 @@ public class AuthenticationController {
 	private AUserRepository repository;
 
 	/*
-	 * @return UserResponseDTO or ErrorResponse object
+	 * Login for User
+	 * 
+	 * @return UserResponseDTO
 	 */
-	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	public ResponseEntity<UserResponseDTO> tryToLogin(@RequestBody UserLoginRequestDTO user, HttpServletResponse response) {
+	@RequestMapping(path = "/user_login", method = RequestMethod.POST)
+	public ResponseEntity<UserResponseDTO> userLogin(@RequestBody UserLoginRequestDTO user,
+			HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
 				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
-		if (userResponse == null) {
+		if (userResponse == null || repository.findOne(userResponse.getId()).getRole() != Role.USER) {
+			throw new LoginFailedException();
+		}
+
+		response.setHeader("Authorization", AppUtils.encryptBasic(user.getEmail(), user.getPassword()));
+		return new ResponseEntity<UserResponseDTO>(userResponse, HttpStatus.OK);
+
+	}
+
+	/*
+	 * Login for Agent
+	 * 
+	 * @return UserResponseDTO
+	 */
+	@RequestMapping(path = "/agent_login", method = RequestMethod.POST)
+	public ResponseEntity<UserResponseDTO> agentLogin(@RequestBody UserLoginRequestDTO user,
+			HttpServletResponse response) {
+		UserResponseDTO userResponse = UserMapper
+				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
+		if (userResponse == null || repository.findOne(userResponse.getId()).getRole() != Role.AGENT) {
+			throw new LoginFailedException();
+		}
+
+		response.setHeader("Authorization", AppUtils.encryptBasic(user.getEmail(), user.getPassword()));
+		return new ResponseEntity<UserResponseDTO>(userResponse, HttpStatus.OK);
+
+	}
+
+	/*
+	 * Login for Admin
+	 * 
+	 * @return UserResponseDTO
+	 */
+	@RequestMapping(path = "/admin_login", method = RequestMethod.POST)
+	public ResponseEntity<UserResponseDTO> adminLogin(@RequestBody UserLoginRequestDTO user,
+			HttpServletResponse response) {
+		UserResponseDTO userResponse = UserMapper
+				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
+		if (userResponse == null || repository.findOne(userResponse.getId()).getRole() != Role.AGENT) {
 			throw new LoginFailedException();
 		}
 
