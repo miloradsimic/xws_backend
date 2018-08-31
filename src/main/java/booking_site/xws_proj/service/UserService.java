@@ -54,7 +54,6 @@ public class UserService implements IUserService {
 	@Override
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
-		//TODO M: Use predicates here!!!
 		Predicate excludeDeleted = UserPredicates.findAll();
 		userRepository.findAll(excludeDeleted).forEach(e -> list.add(e));
 		return list;

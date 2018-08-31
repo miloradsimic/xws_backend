@@ -10,20 +10,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.querydsl.core.types.Predicate;
+
 import booking_site.xws_proj.AppUtils;
 import booking_site.xws_proj.controller.exceptions.LoginFailedException;
 import booking_site.xws_proj.domain.dto.mappper.UserMapper;
 import booking_site.xws_proj.domain.dto.request.UserLoginRequestDTO;
 import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
+import booking_site.xws_proj.domain.querydsl.predicates.UserPredicates;
 import booking_site.xws_proj.repository.AUserRepository;
+import booking_site.xws_proj.repository.UserRepository;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
 	@Autowired
-	private AUserRepository repository;
+	private AUserRepository aRepository;
+	@Autowired
+	private UserRepository userRepositdory;
 
 	/*
 	 * Login for User
@@ -33,9 +39,9 @@ public class AuthenticationController {
 	@RequestMapping(path = "/user_login", method = RequestMethod.POST)
 	public ResponseEntity<UserResponseDTO> userLogin(@RequestBody UserLoginRequestDTO user,
 			HttpServletResponse response) {
-		UserResponseDTO userResponse = UserMapper
-				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
-		if (userResponse == null || repository.findOne(userResponse.getId()).getRole() != Role.USER) {
+		Predicate isLogged = UserPredicates.isLogged(user.getEmail(), user.getPassword());
+		UserResponseDTO userResponse = UserMapper.mapEntityIntoDTO(userRepositdory.findOne(isLogged));
+		if (userResponse == null) {
 			throw new LoginFailedException();
 		}
 
@@ -53,8 +59,8 @@ public class AuthenticationController {
 	public ResponseEntity<UserResponseDTO> agentLogin(@RequestBody UserLoginRequestDTO user,
 			HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
-				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
-		if (userResponse == null || repository.findOne(userResponse.getId()).getRole() != Role.AGENT) {
+				.mapEntityIntoDTO(aRepository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
+		if (userResponse == null || aRepository.findOne(userResponse.getId()).getRole() != Role.AGENT) {
 			throw new LoginFailedException();
 		}
 
@@ -72,8 +78,8 @@ public class AuthenticationController {
 	public ResponseEntity<UserResponseDTO> adminLogin(@RequestBody UserLoginRequestDTO user,
 			HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
-				.mapEntityIntoDTO(repository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
-		if (userResponse == null || repository.findOne(userResponse.getId()).getRole() != Role.AGENT) {
+				.mapEntityIntoDTO(aRepository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
+		if (userResponse == null || aRepository.findOne(userResponse.getId()).getRole() != Role.AGENT) {
 			throw new LoginFailedException();
 		}
 
