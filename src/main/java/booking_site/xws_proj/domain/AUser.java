@@ -34,6 +34,9 @@ public class AUser {
 	@Column(name = "role", nullable = false)
 	protected Role role;
 
+	@Column(nullable = false)
+	protected String address;
+
 	public AUser() {
 	}
 
@@ -79,6 +82,14 @@ public class AUser {
 
 	public String getRoleString() {
 		return role.toString();
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

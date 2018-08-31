@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
@@ -19,14 +21,19 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
 	private Long id;
-	@Column(nullable = false, name = "user_id")
-	private long userId;
-	@Column(nullable = false, name = "accommodation_id")
-	private long accommodationId;
+	@ManyToOne // default fetch plan for ManyToOne is an EAGER
+	@JoinColumn(name = "user_id" /* , insertable = false, updatable = false */)
+	private User user;
+	@ManyToOne // default fetch plan for ManyToOne is an EAGER
+	@JoinColumn(name = "accommodation_id" /*
+											 * , insertable = false, updatable =
+											 * false
+											 */)
+	private Accommodation accommodation;
 	@Column(nullable = false)
 	private String text;
-	@Column(nullable = false)
-	private Status status;
+	@Column(nullable = false, name = "approval_state")
+	private Status approvalState;
 	@Column(nullable = false, name = "comment_time")
 	private Date time;
 
@@ -41,12 +48,20 @@ public class Comment {
 		this.id = id;
 	}
 
-	public long getAccommodationId() {
-		return accommodationId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setAccommodationId(long accommodationId) {
-		this.accommodationId = accommodationId;
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Accommodation getAccommodation() {
+		return accommodation;
+	}
+
+	public void setAccommodation(Accommodation accommodation) {
+		this.accommodation = accommodation;
 	}
 
 	public String getText() {
@@ -57,12 +72,12 @@ public class Comment {
 		this.text = text;
 	}
 
-	public Status getStatus() {
-		return status;
+	public Status getApprovalState() {
+		return approvalState;
 	}
 
-	public void setStatus(Status status) {
-		this.status = status;
+	public void setApprovalState(Status approvalState) {
+		this.approvalState = approvalState;
 	}
 
 	public Date getTime() {
@@ -74,13 +89,13 @@ public class Comment {
 	}
 
 	public String getStatusString() {
-		switch (getStatus()) {
+		switch (getApprovalState()) {
 		case APPROVED:
-			return "approved";
+			return "Approved";
 		case DISAPPROVED:
-			return "disapproved";
+			return "Unapproved";
 		case WAITING_FOR_APPROVAL:
-			return "waiting_for_approval";
+			return "WaitingForApproval";
 		default:
 			return "";
 		}
@@ -89,12 +104,12 @@ public class Comment {
 	public void setStatusString(String status) {
 		switch (status) {
 		case "approved":
-			setStatus(Status.APPROVED);
+			setApprovalState(Status.APPROVED);
 		case "disapproved":
-			setStatus(Status.DISAPPROVED);
+			setApprovalState(Status.DISAPPROVED);
 			;
 		case "waiting_for_approval":
-			setStatus(Status.WAITING_FOR_APPROVAL);
+			setApprovalState(Status.WAITING_FOR_APPROVAL);
 			;
 		default:
 			return;

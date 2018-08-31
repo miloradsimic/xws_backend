@@ -16,7 +16,7 @@ public class AccommodationMapper {
 		dto.setId(entity.getId());
 		dto.setAgent_id(entity.getAgentId());
 		dto.setDescription(entity.getDescription());
-		dto.setPrice(entity.getPrice());
+		dto.setPrice(entity.getDailyPrice());
 
 		return dto;
 	}
@@ -31,7 +31,7 @@ public class AccommodationMapper {
 		entity.setId(dto.getId());
 		entity.setAgentId(dto.getAgent_id());
 		entity.setDescription(dto.getDescription());
-		entity.setPrice(dto.getPrice());
+		entity.setDailyPrice(dto.getPrice());
 
 		return entity;
 	}

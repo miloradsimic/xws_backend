@@ -46,7 +46,7 @@ public class UserController {
 	/*
 	 * Create
 	 * 
-	 * @return UserResponseDTO or ErrorResponse object
+	 * @return UserResponseDTO
 	 */
 	@RequestMapping(path = "/register", method = RequestMethod.POST)
 	public ResponseEntity<UserResponseDTO> create(@RequestBody UserRegisterRequestDTO userDto,
@@ -83,7 +83,7 @@ public class UserController {
 	/*
 	 * Update
 	 * 
-	 * @return UserResponseDTO or ErrorResponse object
+	 * @return UserResponseDTO
 	 */
 	@RequestMapping(path = "/user", method = RequestMethod.PUT)
 	public ResponseEntity<UserResponseDTO> update(HttpServletRequest request, @RequestBody User userDTO) {
@@ -113,7 +113,6 @@ public class UserController {
 	/*
 	 * Delete
 	 * 
-	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(HttpServletRequest request, @PathVariable("id") Long userId) {
@@ -139,7 +138,6 @@ public class UserController {
 	 * 
 	 * @param action: true for block user; false for activate user
 	 * 
-	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/user/{id}/{action}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> blockUser(HttpServletRequest request, @PathVariable("id") Long userId,
