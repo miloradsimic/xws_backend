@@ -22,10 +22,16 @@ public class Accommodation {
 	private long agentId;
 	@Column(nullable = false)
 	private int category;
-	@Column(nullable = false)
+	@Column(nullable = false, name = "accommodation_type")
 	private AccommodationType type;
 	@Column(nullable = false, name = "image_uri")
 	private String imageUri;
+	@Column(nullable = false)
+	private String description;
+	@Column(nullable = false, name = "daily_price")
+	private double dailyPrice;
+	@Column(nullable = false)
+	private String address;
 	@Column(nullable = false)
 	private boolean parking;
 	@Column(nullable = false)
@@ -42,12 +48,6 @@ public class Accommodation {
 	private boolean kitchen;
 	@Column(nullable = false, name = "private_bathroom")
 	private boolean privateBathroom;
-	@Column(nullable = false)
-	private String description;
-	@Column(nullable = false, name = "daily_price")
-	private double dailyPrice;
-	@Column(nullable = false)
-	private String address;
 
 	public Accommodation() {
 	}

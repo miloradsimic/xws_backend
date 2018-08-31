@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import booking_site.xws_proj.controller.exceptions.NotFoundException;
+import com.querydsl.core.types.Predicate;
+
 import booking_site.xws_proj.domain.User;
+import booking_site.xws_proj.domain.querydsl.predicates.UserPredicates;
 import booking_site.xws_proj.repository.UserRepository;
 
 @Service
@@ -53,7 +55,8 @@ public class UserService implements IUserService {
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
 		//TODO M: Use predicates here!!!
-		userRepository.findAll().forEach(e -> list.add(e));
+		Predicate excludeDeleted = UserPredicates.findAll();
+		userRepository.findAll(excludeDeleted).forEach(e -> list.add(e));
 		return list;
 	}
 
