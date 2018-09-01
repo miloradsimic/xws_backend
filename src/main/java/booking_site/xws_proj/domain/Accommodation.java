@@ -20,7 +20,7 @@ public class Accommodation {
 	private Long id;
 	@Column(nullable = false, name = "agent_id")
 	private long agentId;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private int category;
 	@Column(nullable = false, name = "accommodation_type")
 	private AccommodationType type;

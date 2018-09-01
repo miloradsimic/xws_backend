@@ -22,7 +22,7 @@ public class AUser {
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
 	protected Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	protected String email;
 
 	@Column(nullable = false)

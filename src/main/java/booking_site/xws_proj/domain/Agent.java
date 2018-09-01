@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import booking_site.xws_proj.domain.dto.request.UserRegisterRequestDTO;
 import booking_site.xws_proj.domain.enums.Role;
 
 @Entity
@@ -19,6 +20,16 @@ public class Agent extends AClient {
 		role = Role.AGENT;
 	}
 
+	public Agent(UserRegisterRequestDTO agentDto) {
+		this.email = agentDto.getEmail();
+		this.name = agentDto.getName();
+		this.password = agentDto.getPassword();
+		this.address = agentDto.getAddress();
+		this.tin = agentDto.getTin();
+
+		role = Role.AGENT;
+	}
+
 	public Long getTin() {
 		return tin;
 	}
@@ -26,6 +37,5 @@ public class Agent extends AClient {
 	public void setTin(Long tin) {
 		this.tin = tin;
 	}
-	
-	
+
 }

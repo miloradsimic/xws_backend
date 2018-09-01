@@ -40,6 +40,7 @@ public class User extends AClient {
 		this.email = userDto.getEmail();
 		this.name = userDto.getName();
 		this.password = userDto.getPassword();
+		this.address = userDto.getAddress();
 
 		role = Role.USER;
 		deleted = false;

@@ -64,7 +64,6 @@ public class UserController {
 	 */
 	@RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<UserResponseDTO> readOne(@PathVariable("id") Long id) {
-		// TODO M: Use predicate to exclude passwords
 		return new ResponseEntity<UserResponseDTO>(UserMapper.mapEntityIntoDTO(userService.findUser(id)),
 				HttpStatus.OK);
 	}
@@ -74,7 +73,6 @@ public class UserController {
 	 */
 	@RequestMapping(path = "/users", method = RequestMethod.GET)
 	public ResponseEntity<List<UserResponseDTO>> readAll() {
-		// TODO M: Use predicate to exclude passwords
 		List<UserResponseDTO> list = new ArrayList<UserResponseDTO>();
 		userService.findAll().forEach(e -> list.add(UserMapper.mapEntityIntoDTO(e)));
 		return new ResponseEntity<List<UserResponseDTO>>(list, HttpStatus.OK);

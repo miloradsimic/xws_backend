@@ -12,7 +12,7 @@ public class UserResponseDTO {
 	@JsonInclude(Include.NON_NULL)
 	private Long tin;
 	@JsonInclude(Include.NON_NULL)
-	private boolean active;
+	private Boolean active;
 
 	public UserResponseDTO() {
 	}
@@ -57,11 +57,11 @@ public class UserResponseDTO {
 		this.tin = tin;
 	}
 
-	public boolean isActive() {
+	public Boolean isActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
