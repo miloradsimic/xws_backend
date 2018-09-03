@@ -40,6 +40,14 @@ public class Comment {
 	public Comment() {
 	}
 
+	public Comment(User user, Accommodation accommodation, String text) {
+		this.user = user;
+		this.accommodation = accommodation;
+		this.text = text;
+		this.approvalState = Status.WAITING_FOR_APPROVAL;
+		this.time = new Date();
+	}
+
 	public Long getId() {
 		return id;
 	}

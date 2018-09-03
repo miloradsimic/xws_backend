@@ -15,7 +15,8 @@ insert into tbl_agent(id, email, name, password, role, tin, address) values (3, 
 --ACCOMMODATION--
 insert into tbl_accommodation(id, agent_id, category, accommodation_type, image_uri, description, daily_price, address, parking, wifi, breakfast, half_board, full_board, tv, kitchen, private_bathroom) 
 values (1, 3, 1, 1, 'http://www.visitcentralpa.org/data/uploads/media/image/Lodging-Top-2.jpg', 'Two-bedroom studio', 10.00, 'Sarajevo', false, true, false, true, false, true, false, true);
-
+insert into tbl_accommodation(id, agent_id, category, accommodation_type, image_uri, description, daily_price, address, parking, wifi, breakfast, half_board, full_board, tv, kitchen, private_bathroom) 
+values (2, 3, 1, 1, 'http://www.visitcentralpa.org/data/uploads/media/image/Lodging-Top-2.jpg', 'One-bedroom studio', 10.00, 'Novi Sad', false, false, false, false, false, false, false, false);
 --COMMENT--
 insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (1, 1, 1, 'This is comment text', 2, '2018-08-25 7:30');
 

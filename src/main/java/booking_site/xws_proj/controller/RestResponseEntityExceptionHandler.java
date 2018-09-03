@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import booking_site.xws_proj.controller.exceptions.AllreadyCommentedThisAccommodation;
 import booking_site.xws_proj.controller.exceptions.AlreadyExistsException;
 import booking_site.xws_proj.controller.exceptions.LoginFailedException;
 import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
@@ -40,6 +41,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler(value = { LoginFailedException.class })
 	protected ResponseEntity<Object> handleUserBlockedOrDeletedConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+	}
+	
+	@ExceptionHandler(value = { AllreadyCommentedThisAccommodation.class })
+	protected ResponseEntity<Object> handleAlreadyCommentedConflict(RuntimeException ex, WebRequest request) {
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 
 }
