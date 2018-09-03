@@ -38,7 +38,7 @@ public class CommentService implements ICommentService {
 
 		if (!reservationRepository.findAll(pred2).iterator().hasNext()) {
 			throw new NeverReservedException();
-		}
+		} // Hasn't reserved accommodation EVER!
 		return commentRepository.save(comment);
 	}
 

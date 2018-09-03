@@ -13,6 +13,7 @@ public class UserResponseDTO {
 	private Long tin;
 	@JsonInclude(Include.NON_NULL)
 	private Boolean active;
+	private String address;
 
 	public UserResponseDTO() {
 	}
@@ -65,4 +66,17 @@ public class UserResponseDTO {
 		this.active = active;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	
 }

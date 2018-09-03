@@ -24,6 +24,7 @@ import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.dto.mappper.AccommodationMapper;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.ReservationDTO;
+import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
 import booking_site.xws_proj.domain.dto.response.AccommodationResponseDTO;
 import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
@@ -182,5 +183,54 @@ public class AccommodationController {
 		return new ResponseEntity<Object>(reservationResponse, HttpStatus.OK);
 
 	}
+	
+	/*
+	 * Search accommodation
+	 * 
+	 * @return List<AccommodationResponseDTO>
+	 */
+	@RequestMapping(path = "/search", method = RequestMethod.POST)
+	public ResponseEntity<List<Accommodation>> search(@RequestBody SearchRequestDTO requestDto) {
+		
+		System.out.println(requestDto.getTv());
+		List<Accommodation> list = new ArrayList<>();
+		list = accommodationService.search(requestDto);
+		return new ResponseEntity<List<Accommodation>>(list, HttpStatus.OK);
+
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

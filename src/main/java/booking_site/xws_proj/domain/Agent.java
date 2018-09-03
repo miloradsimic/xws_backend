@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import booking_site.xws_proj.domain.dto.request.UserRegisterRequestDTO;
+import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 import booking_site.xws_proj.domain.enums.Role;
 
 @Entity
@@ -20,14 +21,21 @@ public class Agent extends AClient {
 		role = Role.AGENT;
 	}
 
-	public Agent(UserRegisterRequestDTO agentDto) {
-		this.email = agentDto.getEmail();
-		this.name = agentDto.getName();
-		this.password = agentDto.getPassword();
-		this.address = agentDto.getAddress();
-		this.tin = agentDto.getTin();
+	public Agent(UserResponseDTO userResponseDTO) {
+		this.email = userResponseDTO.getEmail();
+		this.name = userResponseDTO.getName();
+		this.address = userResponseDTO.getAddress();
+		this.tin = userResponseDTO.getTin();
 
 		role = Role.AGENT;
+	}
+
+	public Agent(UserRegisterRequestDTO userDto) {
+		this.password = userDto.getPassword();
+		this.email = userDto.getEmail();
+		this.name = userDto.getName();
+		this.address = userDto.getAddress();
+		this.tin = userDto.getTin();
 	}
 
 	public Long getTin() {

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
@@ -18,8 +20,9 @@ public class Accommodation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
 	private Long id;
-	@Column(nullable = false, name = "agent_id")
-	private long agentId;
+	@ManyToOne // default fetch plan for ManyToOne is an EAGER
+	@JoinColumn(name = "agent_id" /* , insertable = false, updatable = false */)
+	private Agent agent;
 	@Column(nullable = true)
 	private int category;
 	@Column(nullable = false, name = "accommodation_type")
@@ -60,12 +63,12 @@ public class Accommodation {
 		this.id = id;
 	}
 
-	public long getAgentId() {
-		return agentId;
+	public Agent getAgent() {
+		return agent;
 	}
 
-	public void setAgentId(long agentId) {
-		this.agentId = agentId;
+	public void setAgent(Agent agent) {
+		this.agent = agent;
 	}
 
 	public int getCategory() {

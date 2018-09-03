@@ -19,6 +19,7 @@ public class UserMapper {
 		dto.setEmail(aUser.getEmail());
 		dto.setName(aUser.getName());
 		dto.setRole(aUser.getRoleString());
+		dto.setAddress(aUser.getAddress());
 		if (aUser.getRole() == Role.USER) {
 			dto.setActive(((User) aUser).isActive());
 		}
