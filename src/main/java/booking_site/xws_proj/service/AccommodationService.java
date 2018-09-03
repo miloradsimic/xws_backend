@@ -9,10 +9,8 @@ import org.springframework.stereotype.Service;
 import com.querydsl.core.types.Predicate;
 
 import booking_site.xws_proj.domain.Accommodation;
-import booking_site.xws_proj.domain.Reservation;
+import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
 import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
-import booking_site.xws_proj.domain.enums.AccommodationType;
-import booking_site.xws_proj.domain.querydsl.predicates.AccommodationPredicate;
 import booking_site.xws_proj.domain.querydsl.predicates.ReservationPredicate;
 import booking_site.xws_proj.repository.AccommodationRepository;
 import booking_site.xws_proj.repository.ReservationRepository;
@@ -86,5 +84,22 @@ public class AccommodationService implements IAccommodationService {
 		}
 
 		return list2;
+	}
+
+	@Override
+	public Boolean checkAvailability(CheckAvailabilityDTO requestDto) {
+
+		ArrayList<Long> reserv = new ArrayList<Long>();
+
+		Predicate pred = ReservationPredicate.findReserved(requestDto.getFrom(), requestDto.getTo(),
+				requestDto.getAccommodation_id());
+
+		reservationRepository.findAll(pred).forEach(e -> reserv.add(e.getAccommodation().getId()));
+
+		if (reserv.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

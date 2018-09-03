@@ -24,4 +24,13 @@ public class ReservationPredicate {
 				.or(QReservation.reservation.startTime.after(from))
 				.and(QReservation.reservation.startTime.before(to));
 	}
+
+	public static Predicate findReserved(Date from, Date to, Long id) {
+		System.out.println(from  + "   " + to  + "    " + id );
+		return QReservation.reservation.endTime.before(to)
+				.and(QReservation.reservation.endTime.after(from))
+				.or(QReservation.reservation.startTime.after(from))
+				.and(QReservation.reservation.startTime.before(to))
+				.and(QReservation.reservation.accommodation.id.eq(id));
+	}
 }

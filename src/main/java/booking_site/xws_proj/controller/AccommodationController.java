@@ -23,6 +23,7 @@ import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.dto.mappper.AccommodationMapper;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
+import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
 import booking_site.xws_proj.domain.dto.request.ReservationDTO;
 import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
 import booking_site.xws_proj.domain.dto.response.AccommodationResponseDTO;
@@ -197,6 +198,18 @@ public class AccommodationController {
 		list = accommodationService.search(requestDto);
 		return new ResponseEntity<List<Accommodation>>(list, HttpStatus.OK);
 
+	}
+	
+	/*
+	 * Check availability
+	 * 
+	 * @return ReservationResponseDTO or ErrorResponse object
+	 */
+	@RequestMapping(path = "/check_if_available", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> checkAvailability(HttpServletRequest request,
+			@RequestBody CheckAvailabilityDTO requestDto) {
+		
+		return new ResponseEntity<Boolean>(accommodationService.checkAvailability(requestDto), HttpStatus.OK);
 	}
 
 }
