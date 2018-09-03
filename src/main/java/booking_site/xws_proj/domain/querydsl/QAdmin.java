@@ -24,6 +24,9 @@ public class QAdmin extends EntityPathBase<Admin> {
     public final QAUser _super = new QAUser(this);
 
     //inherited
+    public final StringPath address = _super.address;
+
+    //inherited
     public final StringPath email = _super.email;
 
     //inherited

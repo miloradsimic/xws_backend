@@ -4,7 +4,7 @@ import static com.querydsl.core.types.PathMetadataFactory.*;
 
 import com.querydsl.core.types.dsl.*;
 
-import booking_site.xws_proj.domain.Agent;
+import booking_site.xws_proj.domain.AClient;
 
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
@@ -12,16 +12,16 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QAgent is a Querydsl query type for Agent
+ * QAClient is a Querydsl query type for AClient
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QAgent extends EntityPathBase<Agent> {
+public class QAClient extends EntityPathBase<AClient> {
 
-    private static final long serialVersionUID = 145755712L;
+    private static final long serialVersionUID = 1607941127L;
 
-    public static final QAgent agent = new QAgent("agent");
+    public static final QAClient aClient = new QAClient("aClient");
 
-    public final QAClient _super = new QAClient(this);
+    public final QAUser _super = new QAUser(this);
 
     //inherited
     public final StringPath address = _super.address;
@@ -41,18 +41,16 @@ public class QAgent extends EntityPathBase<Agent> {
     //inherited
     public final EnumPath<booking_site.xws_proj.domain.enums.Role> role = _super.role;
 
-    public final NumberPath<Long> tin = createNumber("tin", Long.class);
-
-    public QAgent(String variable) {
-        super(Agent.class, forVariable(variable));
+    public QAClient(String variable) {
+        super(AClient.class, forVariable(variable));
     }
 
-    public QAgent(Path<? extends Agent> path) {
+    public QAClient(Path<? extends AClient> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QAgent(PathMetadata metadata) {
-        super(Agent.class, metadata);
+    public QAClient(PathMetadata metadata) {
+        super(AClient.class, metadata);
     }
 
 }

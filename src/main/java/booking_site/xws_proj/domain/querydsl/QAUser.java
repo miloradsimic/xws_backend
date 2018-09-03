@@ -21,6 +21,8 @@ public class QAUser extends EntityPathBase<AUser> {
 
     public static final QAUser aUser = new QAUser("aUser");
 
+    public final StringPath address = createString("address");
+
     public final StringPath email = createString("email");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

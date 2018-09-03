@@ -52,6 +52,25 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
@@ -62,15 +81,11 @@
 	<build>
 		<plugins>
 
- 			<!-- Uputstvo za generisanje Q fajlova za querydsl
- 			
- 				-Pripremiti sve domain fajlove u paketu sourceDirectory
- 				-Otkomentarisati plugin ispod
- 				-Pokrenuti, run config -> generate-sources
- 				-Pronaci generisane fajlove u outputDirectory i kopirati ih u sourceDirectory
- 				-Po zelji sada se mogu premestiti (ja ih cuvam u domain/querydsl paketu)
- 				
- 			-->
+			<!-- Uputstvo za generisanje Q fajlova za querydsl -Pripremiti sve domain 
+				fajlove u paketu sourceDirectory -Otkomentarisati plugin ispod -Pokrenuti, 
+				run config -> generate-sources -Pronaci generisane fajlove u outputDirectory 
+				i kopirati ih u sourceDirectory -Po zelji sada se mogu premestiti (ja ih 
+				cuvam u domain/querydsl paketu) -->
 
 			<!-- https://github.com/querydsl/apt-maven-plugin -->
 			<!--Dependency: https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
@@ -100,6 +115,28 @@
 				</dependencies>
 			</plugin>
 
+			<!-- Plugin for generating java objects based on the XSD -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- <schemaDirectory>src/main/java/booking_site/xws_proj/soap/resources</schemaDirectory> 
+						<outputDirectory>src/main/java/booking_site/xws_proj/soap</outputDirectory> -->
+					<schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
+					<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+					<clearOutputDir>false</clearOutputDir>
+				</configuration>
+			</plugin>
+
 
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -126,6 +163,8 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+
+
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

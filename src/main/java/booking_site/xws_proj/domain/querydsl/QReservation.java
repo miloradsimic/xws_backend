@@ -21,17 +21,17 @@ public class QReservation extends EntityPathBase<Reservation> {
 
     public static final QReservation reservation = new QReservation("reservation");
 
-    public final StringPath email = createString("email");
+    public final NumberPath<Long> accommodationId = createNumber("accommodationId", Long.class);
 
-    public final StringPath email_agent = createString("email_agent");
+    public final NumberPath<Long> clientId = createNumber("clientId", Long.class);
 
     public final DateTimePath<java.util.Date> endTime = createDateTime("endTime", java.util.Date.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> id_accomomdation = createNumber("id_accomomdation", Long.class);
-
     public final DateTimePath<java.util.Date> startTime = createDateTime("startTime", java.util.Date.class);
+
+    public final EnumPath<booking_site.xws_proj.domain.enums.Status> status = createEnum("status", booking_site.xws_proj.domain.enums.Status.class);
 
     public QReservation(String variable) {
         super(Reservation.class, forVariable(variable));

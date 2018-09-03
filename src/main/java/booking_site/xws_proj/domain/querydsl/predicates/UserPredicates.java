@@ -2,8 +2,8 @@ package booking_site.xws_proj.domain.querydsl.predicates;
 
 import com.querydsl.core.types.Predicate;
 
-import booking_site.xws_proj.domain.QAUser;
 import booking_site.xws_proj.domain.enums.Role;
+import booking_site.xws_proj.domain.querydsl.QAUser;
 import booking_site.xws_proj.domain.querydsl.QUser;
 
 public class UserPredicates {

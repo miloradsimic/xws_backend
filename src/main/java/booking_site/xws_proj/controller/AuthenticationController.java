@@ -79,7 +79,7 @@ public class AuthenticationController {
 			HttpServletResponse response) {
 		UserResponseDTO userResponse = UserMapper
 				.mapEntityIntoDTO(aRepository.findByEmailAndPassword(user.getEmail(), user.getPassword()));
-		if (userResponse == null || aRepository.findOne(userResponse.getId()).getRole() != Role.AGENT) {
+		if (userResponse == null || aRepository.findOne(userResponse.getId()).getRole() != Role.ADMIN) {
 			throw new LoginFailedException();
 		}
 
