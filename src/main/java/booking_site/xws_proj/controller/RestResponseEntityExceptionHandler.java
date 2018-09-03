@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import booking_site.xws_proj.controller.exceptions.AllreadyCommentedThisAccommodation;
+import booking_site.xws_proj.controller.exceptions.AllreadyCommentedThisAccommodationException;
 import booking_site.xws_proj.controller.exceptions.AlreadyExistsException;
 import booking_site.xws_proj.controller.exceptions.LoginFailedException;
+import booking_site.xws_proj.controller.exceptions.NeverReservedException;
 import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
 import booking_site.xws_proj.controller.exceptions.NotFoundException;
 import booking_site.xws_proj.controller.exceptions.NotLoggedException;
@@ -43,8 +44,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
 	}
 	
-	@ExceptionHandler(value = { AllreadyCommentedThisAccommodation.class })
+	@ExceptionHandler(value = { AllreadyCommentedThisAccommodationException.class })
 	protected ResponseEntity<Object> handleAlreadyCommentedConflict(RuntimeException ex, WebRequest request) {
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@ExceptionHandler(value = { NeverReservedException.class })
+	protected ResponseEntity<Object> handleNeverReservedConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 

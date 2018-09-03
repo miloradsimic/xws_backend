@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
 
-import booking_site.xws_proj.controller.exceptions.AllreadyCommentedThisAccommodation;
+import booking_site.xws_proj.controller.exceptions.AllreadyCommentedThisAccommodationException;
+import booking_site.xws_proj.controller.exceptions.NeverReservedException;
 import booking_site.xws_proj.domain.Comment;
 import booking_site.xws_proj.domain.Reservation;
 import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
@@ -16,6 +17,7 @@ import booking_site.xws_proj.domain.enums.Status;
 import booking_site.xws_proj.domain.querydsl.predicates.CommentPredicate;
 import booking_site.xws_proj.domain.querydsl.predicates.ReservationPredicate;
 import booking_site.xws_proj.repository.CommentRepository;
+import booking_site.xws_proj.repository.ReservationRepository;
 
 @Service
 public class CommentService implements ICommentService {
@@ -23,14 +25,20 @@ public class CommentService implements ICommentService {
 	@Autowired
 	private CommentRepository commentRepository;
 
+	@Autowired
+	private ReservationRepository reservationRepository;
+
 	@Override
 	public Comment createComment(Comment comment) {
 		Predicate pred = CommentPredicate.findExisting(comment.getUser().getId(), comment.getAccommodation().getId());
 		if (commentRepository.findAll(pred).iterator().hasNext()) {
-			throw new AllreadyCommentedThisAccommodation();
+			throw new AllreadyCommentedThisAccommodationException();
+		} // Hasn't commented earlier on current accommodation
+		Predicate pred2 = ReservationPredicate.hasApprovedReservation(comment.getUser(), comment.getAccommodation());
+
+		if (!reservationRepository.findAll(pred2).iterator().hasNext()) {
+			throw new NeverReservedException();
 		}
-		//Predicate pred2 = ReservationPredicate.hasApprovedReservation(comment.getUser().getId(), comment.getAccommodation().getId());
-		//if(ReservationRepository.findAll(pred).iterator().hasNext()) {)
 		return commentRepository.save(comment);
 	}
 
@@ -63,7 +71,7 @@ public class CommentService implements ICommentService {
 		commentRepository.findAll(pred).forEach(e -> list.add(e));
 		return list;
 	}
-	
+
 	@Override
 	public List<Comment> findAllForAccommodation(long id) {
 		Predicate pred = CommentPredicate.findAllWaitingForAccommodation(id);
@@ -71,6 +79,5 @@ public class CommentService implements ICommentService {
 		commentRepository.findAll(pred).forEach(e -> list.add(e));
 		return list;
 	}
-
 
 }

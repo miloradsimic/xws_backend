@@ -21,4 +21,4 @@ values (2, 3, 1, 1, 'http://www.visitcentralpa.org/data/uploads/media/image/Lodg
 insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (1, 1, 1, 'This is comment text', 2, '2018-08-25 7:30');
 
 --RESERVATION--
-insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status) values (1, 1, 1, '2018-08-25 7:30', '2018-08-29 23:59', 2);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status) values (1, 1, 1, '2018-08-25 7:30', '2018-08-29 23:59', 0);

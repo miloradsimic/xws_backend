@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
@@ -20,17 +22,19 @@ public class Reservation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
 	private Long id;
-	@Column(nullable = false, name = "client_id")
-	private Long clientId;
-	@Column(nullable = false, name = "accommodation_id")
-	private long accommodationId;
+	@ManyToOne
+	@JoinColumn(name = "client_id" /* , insertable = false, updatable = false */)
+	private AClient client;
+	@ManyToOne
+	@JoinColumn(name = "accommodation_id" /* , insertable = false, updatable = false */)
+	private Accommodation accommodation;
 	@Column(nullable = false, name = "start_time")
 	private Date startTime;
 	@Column(nullable = false, name = "end_time")
 	private Date endTime;
 	@Column(nullable = false)
 	private Status status;
-	
+
 	public Reservation() {
 		status = Status.WAITING_FOR_APPROVAL;
 	}
@@ -43,20 +47,28 @@ public class Reservation {
 		this.id = id;
 	}
 
-	public Long getClientId() {
-		return clientId;
+	public AClient getClient() {
+		return client;
 	}
 
-	public void setClientId(Long clientId) {
-		this.clientId = clientId;
+	public void setClient(AClient client) {
+		this.client = client;
 	}
 
-	public long getAccommodationId() {
-		return accommodationId;
+	public Accommodation getAccommodation() {
+		return accommodation;
 	}
 
-	public void setAccommodationId(long accommodationId) {
-		this.accommodationId = accommodationId;
+	public void setAccommodation(Accommodation accommodation) {
+		this.accommodation = accommodation;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	public Date getStartTime() {
