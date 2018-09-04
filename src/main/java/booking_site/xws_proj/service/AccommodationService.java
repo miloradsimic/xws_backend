@@ -175,7 +175,7 @@ public class AccommodationService implements IAccommodationService {
 		if (aUserRepository.findOne(id).getId() != reservationRepository.findOne(reservationId).getClient().getId()) {
 			throw new NotAuthorizedException();
 		}
-		if (reservationRepository.findOne(reservationId).getStartTime().after(new Date())) {
+		if (reservationRepository.findOne(reservationId).getStartTime().before(new Date())) {
 			throw new CancelReservationException();
 		}
 		return null;
