@@ -11,6 +11,7 @@ import com.querydsl.core.types.Predicate;
 import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
 import booking_site.xws_proj.controller.exceptions.NotLoggedException;
 import booking_site.xws_proj.controller.exceptions.ServerErrorException;
+import booking_site.xws_proj.domain.AClient;
 import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.Message;
 import booking_site.xws_proj.domain.dto.mappper.MessageMapper;
@@ -30,23 +31,37 @@ public class MessageService implements IMessageService {
 	AUserRepository aUserRepository;
 
 	@Override
-	public MessageResponseDTO create(MessageRequestDTO requestDto, AUser client) {
+	public MessageResponseDTO create(MessageRequestDTO requestDto, AUser sender) {
 
-		if (client == null) {
+		if (sender == null) {
 			throw new NotLoggedException();
 		}
 
-		if (client.getRole() == Role.ADMIN) {
+		if (sender.getRole() == Role.ADMIN) {
 			throw new NotAuthorizedException();
 		} // else permission granted
 		
+		MessageResponseDTO responseDTO;
+		Message message2;
+		AUser receiver = aUserRepository.findOne(requestDto.getReceiver_id());
 		
-		Message message = MessageMapper.mapDtoIntoEntity(requestDto, client, aUserRepository.findOne(requestDto.getReceiver_id()));
-		if ((message = messageRepository.save(message)) == null) {
+		System.out.println("sender" + sender.toString() );
+
+		System.out.println("receiver "  +receiver.toString() );
+//		
+//		AClient sender = new AClient(client);
+//		AClient receiver2 = new AClient(receiver);
+		
+		Message message = MessageMapper.mapDtoIntoEntity(requestDto, (AClient)sender, (AClient)receiver);
+		if(message == null) {
 			throw new ServerErrorException();
 		}
+		if ((message2 = messageRepository.save(message)) == null) {
+			throw new ServerErrorException();
+		}
+		System.out.println("message:     " + message2.toString());
 
-		return MessageMapper.mapEntityIntoDTO(message);
+		return MessageMapper.mapEntityIntoDTO(message2);
 	}
 
 	@Override

@@ -18,23 +18,23 @@ public class MessageMapper {
 		MessageResponseDTO dto = new MessageResponseDTO();
 
 		dto.setId(entity.getId());
-		dto.setReceiver(entity.getReceiver());
-		dto.setSender(entity.getSender());
+		dto.setReceiver(UserMapper.mapEntityIntoDTO(entity.getReceiver()));
+		dto.setSender(UserMapper.mapEntityIntoDTO(entity.getSender()));
 		dto.setText(entity.getText());
 		dto.setTime(entity.getTime());
 
 		return dto;
 	}
 
-	public static Message mapDtoIntoEntity(MessageRequestDTO dto, AUser sender, AUser receiver) {
+	public static Message mapDtoIntoEntity(MessageRequestDTO dto, AClient sender, AClient receiver) {
 
 		if (dto == null) {
 			return null;
 		}
 		Message entity = new Message();
 
-		entity.setReceiver((AClient) receiver);
-		entity.setSender((AClient) sender);
+		entity.setReceiver(receiver);
+		entity.setSender(sender);
 		entity.setText(dto.getText());
 		entity.setTime(new Date());
 

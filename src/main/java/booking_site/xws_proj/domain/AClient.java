@@ -9,4 +9,9 @@ import javax.persistence.Inheritance;
 @Inheritance(strategy = TABLE_PER_CLASS)
 public class AClient extends AUser {
 
+	public AClient() {
+		super();
+	}
+	
+
 }

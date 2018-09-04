@@ -4,15 +4,12 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import booking_site.xws_proj.domain.AClient;
-
 public class MessageResponseDTO {
 
 	private Long id;
-	private AClient sender;
-	private AClient receiver;
+	private UserResponseDTO sender;
+	private UserResponseDTO receiver;
 	private String text;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date time;
 
 	public MessageResponseDTO() {
@@ -26,19 +23,19 @@ public class MessageResponseDTO {
 		this.id = id;
 	}
 
-	public AClient getSender() {
+	public UserResponseDTO getSender() {
 		return sender;
 	}
 
-	public void setSender(AClient sender) {
+	public void setSender(UserResponseDTO sender) {
 		this.sender = sender;
 	}
 
-	public AClient getReceiver() {
+	public UserResponseDTO getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(AClient receiver) {
+	public void setReceiver(UserResponseDTO receiver) {
 		this.receiver = receiver;
 	}
 

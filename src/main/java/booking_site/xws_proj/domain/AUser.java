@@ -92,4 +92,12 @@ public class AUser {
 		this.address = address;
 	}
 
+	@Override
+	public String toString() {
+		return "AUser [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name + ", role=" + role
+				+ ", address=" + address + "]";
+	}
+	
+	
+
 }

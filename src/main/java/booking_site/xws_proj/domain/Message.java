@@ -20,10 +20,10 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "generator")
 	private Long id;
 	@ManyToOne // default fetch plan for ManyToOne is an EAGER
-	@JoinColumn(name = "sender_id", insertable = false, updatable = false)
+	@JoinColumn(name = "sender_id"/*, insertable = false, updatable = false*/)
 	private AClient sender;
 	@ManyToOne // default fetch plan for ManyToOne is an EAGER
-	@JoinColumn(name = "receiver_id", insertable = false, updatable = false)
+	@JoinColumn(name = "receiver_id"/*, insertable = false, updatable = false*/)
 	private AClient receiver;
 	@Column(nullable = false)
 	private String text;
@@ -73,4 +73,11 @@ public class Message {
 		this.time = time;
 	}
 
+	@Override
+	public String toString() {
+		return "Message [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", text=" + text + ", time="
+				+ time + "]";
+	}
+
+	
 }
