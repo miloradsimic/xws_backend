@@ -13,6 +13,7 @@ public class ReservationResponseDTO {
 	private AccommodationResponseDTO accommodation;
 	private Date from;
 	private Date to;
+	private double price;
 
 	public ReservationResponseDTO() {
 		super();
@@ -30,6 +31,7 @@ public class ReservationResponseDTO {
 		accommodation = AccommodationMapper.mapEntityIntoDTO(r.getAccommodation());
 		from = r.getStartTime();
 		to = r.getEndTime();
+		price = r.getPrice();
 	}
 
 	public Long getId() {
@@ -70,6 +72,14 @@ public class ReservationResponseDTO {
 
 	public void setTo(Date to) {
 		this.to = to;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 }

@@ -1,9 +1,6 @@
 package booking_site.xws_proj.controller;
 
-import java.rmi.ServerException;
-import java.rmi.ServerRuntimeException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +46,7 @@ public class AccommodationController {
 	/*
 	 * Create
 	 * 
-	 * @return AccommodationResponseDTO or ErrorResponse object (unimplemented)
+	 * @return AccommodationResponseDTO
 	 */
 	@RequestMapping(path = "/accommodation", method = RequestMethod.POST)
 	public ResponseEntity<AccommodationResponseDTO> create(HttpServletRequest request,
@@ -105,7 +102,7 @@ public class AccommodationController {
 	/*
 	 * Update
 	 * 
-	 * @return AccommodationResponseDTO or ErrorResponse object
+	 * @return AccommodationResponseDTO
 	 */
 	@RequestMapping(path = "/accommodation", method = RequestMethod.PUT)
 	public ResponseEntity<AccommodationResponseDTO> update(HttpServletRequest request,
@@ -136,7 +133,6 @@ public class AccommodationController {
 	/*
 	 * Delete
 	 * 
-	 * @return Nothing or ErrorResponse object
 	 */
 	@RequestMapping(path = "/accommodation/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<AccommodationResponseDTO> delete(HttpServletRequest request,
@@ -161,7 +157,7 @@ public class AccommodationController {
 	/*
 	 * Reserve accommodation
 	 * 
-	 * @return ReservationResponseDTO or ErrorResponse object
+	 * @return ReservationResponseDTO
 	 */
 	@RequestMapping(path = "/reservation", method = RequestMethod.POST)
 	public ResponseEntity<ReservationResponseDTO> makeAReservation(HttpServletRequest request,
@@ -177,20 +173,20 @@ public class AccommodationController {
 		if (aUser.getRole() != Role.AGENT && aUser.getRole() != Role.USER) {
 			throw new NotAuthorizedException();
 		} // else permission granted
-		
+
 		reservationDTO.setClient_id(aUser.getId());
 		Reservation entry = accommodationService.reserveAccommodation(reservationDTO);
-		
-		if(entry == null) {
+
+		if (entry == null) {
 			throw new ReservationNotAvailableException();
 		}
-		
+
 		ReservationResponseDTO responseDto = new ReservationResponseDTO(entry);
-		
+
 		return new ResponseEntity<ReservationResponseDTO>(responseDto, HttpStatus.CREATED);
 
 	}
-	
+
 	/*
 	 * Search accommodation
 	 * 
@@ -198,59 +194,101 @@ public class AccommodationController {
 	 */
 	@RequestMapping(path = "/search", method = RequestMethod.POST)
 	public ResponseEntity<List<Accommodation>> search(@RequestBody SearchRequestDTO requestDto) {
-		
+
 		System.out.println(requestDto.getTv());
 		List<Accommodation> list = new ArrayList<>();
 		list = accommodationService.search(requestDto);
 		return new ResponseEntity<List<Accommodation>>(list, HttpStatus.OK);
 
 	}
-	
+
 	/*
 	 * Check availability
 	 * 
-	 * @return ReservationResponseDTO or ErrorResponse object
+	 * @return Boolean
 	 */
 	@RequestMapping(path = "/check_if_available", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> checkAvailability(HttpServletRequest request,
 			@RequestBody CheckAvailabilityDTO requestDto) {
-		
+
 		return new ResponseEntity<Boolean>(accommodationService.checkAvailability(requestDto), HttpStatus.OK);
 	}
-	
+
+	/*
+	 * Fetch all reservations for agent for selected accommodations. Implemented
+	 * in SOAP
+	 * 
+	 * @return List<Reservation>
+	 */
+	@RequestMapping(path = "/accommodation_reservations/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<ReservationResponseDTO>> readAllReservationsForAccommodation(HttpServletRequest request,
+			@PathVariable("id") Long accommodationId) {
+		AUser aUser;
+
+		String encoded = request.getHeader("Authorization");
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
+			throw new NotLoggedException();
+		}
+		if (aUser.getRole() != Role.AGENT) {
+			throw new NotAuthorizedException();
+		} // else permission granted
+		List<ReservationResponseDTO> list;
+		list = accommodationService.findAllReservationsForAccommodation(accommodationId);
+		return new ResponseEntity<List<ReservationResponseDTO>>(list, HttpStatus.OK);
+
+	}
+
+	/*
+	 * Fetch all reservations for user
+	 * 
+	 * @return List<Reservation>
+	 */
+	@RequestMapping(path = "/user_reservations", method = RequestMethod.GET)
+	public ResponseEntity<List<ReservationResponseDTO>> readAllReservationsForUser(HttpServletRequest request) {
+		AUser aUser;
+
+		String encoded = request.getHeader("Authorization");
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
+			throw new NotLoggedException();
+		}
+		if (aUser.getRole() != Role.USER) {
+			throw new NotFoundException();
+		} // else permission granted
+		List<ReservationResponseDTO> list;
+		list = accommodationService.findAllReservationsForUser(aUser.getId());
+		return new ResponseEntity<List<ReservationResponseDTO>>(list, HttpStatus.OK);
+
+	}
+
+	/*
+	 * Fetch all reservations for user
+	 * 
+	 * @return List<Reservation>
+	 */
+	@RequestMapping(path = "/cancel_reservation/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Void> cancelReservation(HttpServletRequest request, @PathVariable("id") Long reservationId) {
+		AUser aUser;
+
+		String encoded = request.getHeader("Authorization");
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
+			throw new NotLoggedException();
+		}
+		if (aUser.getRole() != Role.USER) {
+			throw new NotFoundException();
+		} // else permission granted
+
+		if (!accommodationService.cancelReservation(aUser.getId(), reservationId)) {
+			throw new NotFoundException();
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

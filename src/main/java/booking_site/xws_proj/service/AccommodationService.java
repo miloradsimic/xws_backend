@@ -1,7 +1,9 @@
 package booking_site.xws_proj.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +11,17 @@ import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
 
+import booking_site.xws_proj.controller.exceptions.CancelReservationException;
+import booking_site.xws_proj.controller.exceptions.DateQueryException;
+import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
 import booking_site.xws_proj.domain.AClient;
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.Reservation;
 import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
 import booking_site.xws_proj.domain.dto.request.ReservationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
+import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
+import booking_site.xws_proj.domain.querydsl.predicates.AccommodationPredicate;
 import booking_site.xws_proj.domain.querydsl.predicates.ReservationPredicate;
 import booking_site.xws_proj.repository.AUserRepository;
 import booking_site.xws_proj.repository.AccommodationRepository;
@@ -96,25 +103,18 @@ public class AccommodationService implements IAccommodationService {
 
 	@Override
 	public Boolean checkAvailability(CheckAvailabilityDTO requestDto) {
+		
+		if(requestDto.getFrom().after(requestDto.getTo())){
+			throw new DateQueryException();
+		}
 
-//		ArrayList<Long> reserv = new ArrayList<Long>();
-//
-//		Predicate pred = ReservationPredicate.findReserved(requestDto.getFrom(), requestDto.getTo(),
-//				requestDto.getAccommodation_id());
-//
-//		reservationRepository.findAll(pred).forEach(e -> reserv.add(e.getAccommodation().getId()));
-//		
 		ArrayList<Reservation> reserv = new ArrayList<Reservation>();
 
 		Predicate pred = ReservationPredicate.findReserved(requestDto.getFrom(), requestDto.getTo(),
 				requestDto.getAccommodation_id());
 
 		reservationRepository.findAll(pred).forEach(e -> reserv.add(e));
-		
-		for (Reservation reservation : reserv) {
-			System.out.println(reservation.toString());
-		}
-		
+
 		if (reserv.isEmpty()) {
 			return true;
 		} else {
@@ -128,18 +128,56 @@ public class AccommodationService implements IAccommodationService {
 		arg.setAccommodation_id(dto.getAccommodation_id());
 		arg.setFrom(dto.getFrom());
 		arg.setTo(dto.getTo());
-		System.out.println("from:  "+ dto.getFrom() + "   to:  " + dto.getTo() + "  id:  " + dto.getAccommodation_id());
 
 		if (checkAvailability(arg)) {
-			AClient c = ((AClient)aUserRepository.findOne(dto.getClient_id()));
+			AClient c = ((AClient) aUserRepository.findOne(dto.getClient_id()));
 			Accommodation a = accommodationRepository.findOne(dto.getAccommodation_id());
-			Reservation e = new Reservation(dto, c,	a);
+			Reservation e = new Reservation(dto, c, a);
+			Calendar from = GregorianCalendar.getInstance();
+			Calendar to = GregorianCalendar.getInstance();
 
-			System.out.println(e.toString());
+			from.setTime(dto.getFrom());
+			to.setTime(dto.getTo());
+
+			int days = to.get(Calendar.DATE) - from.get(Calendar.DATE);
+			e.setPrice(a.getDailyPrice() * days + 1);
+
 			return reservationRepository.save(e);
 		}
 		return null;
 
 	}
+
+	@Override
+	public List<ReservationResponseDTO> findAllReservationsForAccommodation(Long accommodationId) {
+
+		List<ReservationResponseDTO> list = new ArrayList<>();
+		Predicate pred = AccommodationPredicate.reservationsForAccommodation(accommodationId);
+		reservationRepository.findAll(pred).forEach(e -> list.add(new ReservationResponseDTO(e)));
+		return list;
+
+	}
+
+	@Override
+	public List<ReservationResponseDTO> findAllReservationsForUser(Long userId) {
+		List<ReservationResponseDTO> list = new ArrayList<>();
+		Predicate pred = AccommodationPredicate.reservationsForUser(userId);
+		reservationRepository.findAll(pred).forEach(e -> list.add(new ReservationResponseDTO(e)));
+		return list;
+	}
+
+	@Override
+	public Boolean cancelReservation(Long id, Long reservationId) {
+		if(!accommodationRepository.exists(reservationId)) {
+			throw new NotAuthorizedException();
+		}
+		if (aUserRepository.findOne(id).getId() != reservationRepository.findOne(reservationId).getClient().getId()) {
+			throw new NotAuthorizedException();
+		}
+		if (reservationRepository.findOne(reservationId).getStartTime().after(new Date())) {
+			throw new CancelReservationException();
+		}
+		return null;
+}
 
 }

@@ -12,7 +12,7 @@ public class CommentResponseDTO {
 	private AccommodationResponseDTO accommodation;
 	private String text;
 	private Status approvalState;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date time;
 
 	public CommentResponseDTO() {

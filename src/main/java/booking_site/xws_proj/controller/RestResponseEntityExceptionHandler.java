@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import booking_site.xws_proj.controller.exceptions.AllreadyCommentedThisAccommodationException;
 import booking_site.xws_proj.controller.exceptions.AlreadyExistsException;
+import booking_site.xws_proj.controller.exceptions.CancelReservationException;
+import booking_site.xws_proj.controller.exceptions.DateQueryException;
 import booking_site.xws_proj.controller.exceptions.LoginFailedException;
 import booking_site.xws_proj.controller.exceptions.NeverReservedException;
 import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
@@ -44,19 +46,29 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	protected ResponseEntity<Object> handleUserBlockedOrDeletedConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
 	}
-	
+
 	@ExceptionHandler(value = { AllreadyCommentedThisAccommodationException.class })
 	protected ResponseEntity<Object> handleAlreadyCommentedConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
-	
+
 	@ExceptionHandler(value = { NeverReservedException.class })
 	protected ResponseEntity<Object> handleNeverReservedConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
-	
+
 	@ExceptionHandler(value = { ReservationNotAvailableException.class })
 	protected ResponseEntity<Object> handleReservationNotAvailableConflict(RuntimeException ex, WebRequest request) {
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+
+	@ExceptionHandler(value = { CancelReservationException.class })
+	protected ResponseEntity<Object> handleCancelReservationConflict(RuntimeException ex, WebRequest request) {
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+
+	@ExceptionHandler(value = { DateQueryException.class })
+	protected ResponseEntity<Object> handleDateQueryConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 

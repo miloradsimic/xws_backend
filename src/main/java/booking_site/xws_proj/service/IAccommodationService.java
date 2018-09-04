@@ -7,6 +7,8 @@ import booking_site.xws_proj.domain.Reservation;
 import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
 import booking_site.xws_proj.domain.dto.request.ReservationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
+import booking_site.xws_proj.domain.dto.response.AccommodationResponseDTO;
+import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
 
 public interface IAccommodationService {
 
@@ -27,4 +29,10 @@ public interface IAccommodationService {
 	Boolean checkAvailability(CheckAvailabilityDTO requestDto);
 	
 	Reservation reserveAccommodation(ReservationRequestDTO dto);
+
+	List<ReservationResponseDTO> findAllReservationsForUser(Long userId);
+
+	List<ReservationResponseDTO> findAllReservationsForAccommodation(Long accommodationId);
+
+	Boolean cancelReservation(Long id, Long accommodationId);
  }

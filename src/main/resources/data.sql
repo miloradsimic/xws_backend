@@ -6,7 +6,6 @@ insert into tbl_user(id, email, name, password, role, active, deleted, address) 
 insert into tbl_user(id, email, name, password, role, active, deleted, address) values (4, 'u2@a.a', 'User2deleted', 'pass', 0, true, true, 'Novi Sad');
 insert into tbl_user(id, email, name, password, role, active, deleted, address) values (5, 'u3@a.a', 'User2blocked', 'pass', 0, false, false, 'Novi Sad');
 insert into tbl_user(id, email, name, password, role, active, deleted, address) values (6, 'u4@a.a', 'User2blockedAndDeleted', 'pass', 0, false, true, 'Novi Sad');
-insert into tbl_user(id, email, name, password, role, active, deleted, address) values (7, 'admin@mail.com', 'admin', 'pass', 1, true, false, 'Novi Sad');
 insert into tbl_user(id, email, name, password, role, active, deleted, address) values (8, 'jovo@mail.com', 'jovo', 'pass', 0, true, false, 'Novi Sad');
 insert into tbl_user(id, email, name, password, role, active, deleted, address) values (9, 'pero@mail.com', 'pero', 'pass', 0, true, false, 'Novi Sad');
 insert into tbl_user(id, email, name, password, role, active, deleted, address) values (10, 'simo@mail.com', 'simo', 'pass', 0, true, false, 'Novi Sad');
@@ -15,6 +14,7 @@ insert into tbl_user(id, email, name, password, role, active, deleted, address) 
 
 --ADMIN--
 insert into tbl_admin(id, email, name, password, role, address) values (2, 'a1@a.a', 'Admin1', 'pass', 1, 'Beograd');
+insert into tbl_admin(id, email, name, password, role, address) values (7, 'admin@mail.com', 'admin', 'pass', 1, 'Novi Sad');
 
 --AGENT--
 insert into tbl_agent(id, email, name, password, role, tin, address) values (3, 'ag1@a.a', 'Agent1', 'pass', 2, 123456789, 'Banja Luka');
@@ -63,10 +63,10 @@ values (18, 3, 3, 1, 'https://imgcld.yatra.com/ytimages/image/upload/t_seo_Hotel
 insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (1, 1, 1, 'This is comment text', 2, '2018-08-25 7:30');
 
 --RESERVATION--
---insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status) values (1, 1, 1, '2018-08-25 7:30', '2018-08-29 23:59', 0);
-insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status) values (2, 7, 2, '2018-08-29 7:30', '2018-08-31 23:59', 0);
-insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status) values (3, 1, 1, '2018-09-01 7:30', '2018-09-10 23:59', 0);
-insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status) values (4, 8, 2, '2018-09-01 7:30', '2018-09-15 23:59', 0);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (1, 1, 1, '2018-08-25 7:30', '2018-08-29 23:59', 0, 11);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (2, 7, 2, '2018-08-29 7:30', '2018-08-31 23:59', 0, 11);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (3, 1, 1, '2018-09-01 7:30', '2018-09-10 23:59', 0, 11);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (4, 8, 2, '2018-09-01 7:30', '2018-09-15 23:59', 0, 11);
 
 
 

@@ -38,6 +38,8 @@ public class Reservation {
 	private Date endTime;
 	@Column(nullable = false)
 	private Status status;
+	@Column(nullable = false)
+	private double price;
 
 	public Reservation() {
 		status = Status.WAITING_FOR_APPROVAL;
@@ -99,12 +101,18 @@ public class Reservation {
 		this.endTime = endTime;
 	}
 
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
 	@Override
 	public String toString() {
 		return "Reservation [id=" + id + ", client=" + client + ", accommodation=" + accommodation + ", startTime="
 				+ startTime + ", endTime=" + endTime + ", status=" + status + "]";
 	}
-	
-	
 
 }
