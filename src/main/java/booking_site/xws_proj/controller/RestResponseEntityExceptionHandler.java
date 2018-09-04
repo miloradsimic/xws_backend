@@ -18,6 +18,7 @@ import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
 import booking_site.xws_proj.controller.exceptions.NotFoundException;
 import booking_site.xws_proj.controller.exceptions.NotLoggedException;
 import booking_site.xws_proj.controller.exceptions.ReservationNotAvailableException;
+import booking_site.xws_proj.controller.exceptions.ServerErrorException;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
@@ -70,6 +71,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler(value = { DateQueryException.class })
 	protected ResponseEntity<Object> handleDateQueryConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@ExceptionHandler(value = { ServerErrorException.class })
+	protected ResponseEntity<Object> handleServerErrorConflict(RuntimeException ex, WebRequest request) {
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}
 
 }

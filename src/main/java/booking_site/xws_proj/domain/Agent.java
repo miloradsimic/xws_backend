@@ -36,6 +36,8 @@ public class Agent extends AClient {
 		this.name = userDto.getName();
 		this.address = userDto.getAddress();
 		this.tin = userDto.getTin();
+
+		this.role = Role.AGENT;
 	}
 
 	public Long getTin() {

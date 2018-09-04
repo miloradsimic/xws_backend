@@ -68,6 +68,8 @@ insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_tim
 insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (3, 1, 1, '2018-09-01 7:30', '2018-09-10 23:59', 0, 11);
 insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (4, 8, 2, '2018-09-01 7:30', '2018-09-15 23:59', 0, 11);
 
+insert into tbl_message(id, receiver_id, sender_id, message_time, text) values (1, 1, 3, '2018-09-15 23:59', 'Message from database. from  ag1@a.a to u1@a.a');
+
 
 
 

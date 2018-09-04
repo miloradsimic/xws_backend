@@ -14,6 +14,7 @@ import com.querydsl.core.types.Predicate;
 import booking_site.xws_proj.controller.exceptions.CancelReservationException;
 import booking_site.xws_proj.controller.exceptions.DateQueryException;
 import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
+import booking_site.xws_proj.controller.exceptions.NotFoundException;
 import booking_site.xws_proj.domain.AClient;
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.Reservation;
@@ -168,8 +169,8 @@ public class AccommodationService implements IAccommodationService {
 
 	@Override
 	public Boolean cancelReservation(Long id, Long reservationId) {
-		if(!accommodationRepository.exists(reservationId)) {
-			throw new NotAuthorizedException();
+		if(!reservationRepository.exists(reservationId)) {
+			throw new NotFoundException();
 		}
 		if (aUserRepository.findOne(id).getId() != reservationRepository.findOne(reservationId).getClient().getId()) {
 			throw new NotAuthorizedException();
