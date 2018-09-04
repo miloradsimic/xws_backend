@@ -29,7 +29,7 @@ public class Accommodation {
 	private AccommodationType type;
 	@Column(nullable = false, name = "image_uri")
 	private String imageUri;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 1000)
 	private String description;
 	@Column(nullable = false, name = "daily_price")
 	private double dailyPrice;
