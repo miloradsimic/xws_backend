@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,6 +65,52 @@ public class MessageController {
 		return new ResponseEntity<MessageResponseDTO>(responseDTO, HttpStatus.CREATED);
 	}
 
+	/*
+	 * Get all sent messages
+	 * 
+	 * @return List<MessageResponseDTO>
+	 */
+	@RequestMapping(path = "/all_sent", method = RequestMethod.GET)
+	public ResponseEntity<List<MessageResponseDTO>> findAllSent(HttpServletRequest request) {
+
+		AUser aUser;
+
+		String encoded = request.getHeader("Authorization");
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
+			throw new NotLoggedException();
+		}
+		
+		List<MessageResponseDTO> responseList = messageService.findAllSent(aUser);
+		
+		
+		return new ResponseEntity<List<MessageResponseDTO>>(responseList, HttpStatus.OK);
+	}
+
+	/*
+	 * Get all received messages
+	 * 
+	 * @return List<MessageResponseDTO>
+	 */
+	@RequestMapping(path = "/all_received", method = RequestMethod.GET)
+	public ResponseEntity<List<MessageResponseDTO>> findAllReceived(HttpServletRequest request) {
+
+		AUser aUser;
+
+		String encoded = request.getHeader("Authorization");
+		String username = AppUtils.getUsernameFromBasic(encoded);
+		String password = AppUtils.getPasswordFromBasic(encoded);
+		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
+			throw new NotLoggedException();
+		}
+		
+		List<MessageResponseDTO> responseList = messageService.findAllReceived(aUser);
+		
+		
+		return new ResponseEntity<List<MessageResponseDTO>>(responseList, HttpStatus.OK);
+	}
+	
 	
 	
 	

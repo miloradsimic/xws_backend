@@ -65,6 +65,7 @@ public class MessageService implements IMessageService {
 		List<MessageResponseDTO> list = new ArrayList<MessageResponseDTO>();
 		Predicate findSent = MessagePredicates.findSent(client.getId());
 		messageRepository.findAll(findSent).forEach(e -> list.add(MessageMapper.mapEntityIntoDTO(e)));
+		
 		return list;
 	}
 
