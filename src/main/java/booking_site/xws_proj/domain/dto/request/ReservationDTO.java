@@ -3,25 +3,48 @@ package booking_site.xws_proj.domain.dto.request;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import booking_site.xws_proj.domain.AClient;
+import booking_site.xws_proj.domain.Accommodation;
+import booking_site.xws_proj.domain.Reservation;
 
 public class ReservationDTO {
-
-	private Long user_id;
+	@JsonInclude(Include.NON_NULL)
+	private Long id;
+	private AClient client;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date start_time;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date end_time;
-	private Long accommodation_id;
+	private Accommodation accommmodation;
 
 	public ReservationDTO() {
 	}
 
-	public Long getUser_id() {
-		return user_id;
+	public ReservationDTO(Reservation r) {
+		id = r.getId();
+		client = r.getClient();
+		accommmodation = r.getAccommodation();
+		start_time = r.getStartTime();
+		end_time = r.getEndTime();
 	}
 
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public AClient getClient() {
+		return client;
+	}
+
+	public void setClient(AClient client) {
+		this.client = client;
 	}
 
 	public Date getStart_time() {
@@ -40,12 +63,12 @@ public class ReservationDTO {
 		this.end_time = end_time;
 	}
 
-	public Long getAccommodation_id() {
-		return accommodation_id;
+	public Accommodation getAccommmodation() {
+		return accommmodation;
 	}
 
-	public void setAccommodation_id(Long accommodation_id) {
-		this.accommodation_id = accommodation_id;
+	public void setAccommmodation(Accommodation accommmodation) {
+		this.accommmodation = accommmodation;
 	}
 
 }

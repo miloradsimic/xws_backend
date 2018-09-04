@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import booking_site.xws_proj.domain.dto.request.ReservationDTO;
 import booking_site.xws_proj.domain.enums.Status;
 
 @Entity
@@ -36,6 +37,14 @@ public class Reservation {
 	private Status status;
 
 	public Reservation() {
+		status = Status.WAITING_FOR_APPROVAL;
+	}
+
+	public Reservation(ReservationDTO dto) {
+		client = dto.getClient();
+		startTime = dto.getStart_time();
+		endTime = dto.getEnd_time();
+		accommodation = dto.getAccommmodation();
 		status = Status.WAITING_FOR_APPROVAL;
 	}
 

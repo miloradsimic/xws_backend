@@ -1,12 +1,9 @@
 package booking_site.xws_proj.domain.dto.mappper;
 
-import javax.jws.soap.SOAPBinding.Use;
-
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.Agent;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
 import booking_site.xws_proj.domain.dto.response.AccommodationResponseDTO;
-import booking_site.xws_proj.domain.dto.response.UserResponseDTO;
 
 public class AccommodationMapper {
 

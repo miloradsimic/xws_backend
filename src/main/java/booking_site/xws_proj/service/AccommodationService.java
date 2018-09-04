@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.querydsl.core.types.Predicate;
 
 import booking_site.xws_proj.domain.Accommodation;
+import booking_site.xws_proj.domain.Reservation;
 import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
+import booking_site.xws_proj.domain.dto.request.ReservationDTO;
 import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
 import booking_site.xws_proj.domain.querydsl.predicates.ReservationPredicate;
 import booking_site.xws_proj.repository.AccommodationRepository;
@@ -102,4 +104,20 @@ public class AccommodationService implements IAccommodationService {
 			return false;
 		}
 	}
+
+	@Override
+	public Reservation reserveAccommodation(ReservationDTO dto) {
+		CheckAvailabilityDTO arg = new CheckAvailabilityDTO();
+		arg.setAccommodation_id(dto.getAccommmodation().getId());
+		arg.setFrom(dto.getStart_time());
+		arg.setTo(dto.getEnd_time());
+
+		if (checkAvailability(arg)) {
+			Reservation e = new Reservation(dto);
+			return reservationRepository.save(new Reservation(dto));
+		}
+		return null;
+
+	}
+
 }

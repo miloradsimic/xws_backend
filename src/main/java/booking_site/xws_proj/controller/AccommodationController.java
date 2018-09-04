@@ -21,6 +21,7 @@ import booking_site.xws_proj.controller.exceptions.NotFoundException;
 import booking_site.xws_proj.controller.exceptions.NotLoggedException;
 import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.Accommodation;
+import booking_site.xws_proj.domain.Reservation;
 import booking_site.xws_proj.domain.dto.mappper.AccommodationMapper;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
@@ -171,11 +172,17 @@ public class AccommodationController {
 		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
 			throw new NotLoggedException();
 
+		}
+		if (aUser.getRole() != Role.AGENT || aUser.getRole() != Role.USER) {
+			throw new NotAuthorizedException();
 		} // else permission granted
-
-		// TODO: Unimplemented!!! check if user is reserving for himself
-		// try to reserve, receive feedback message or error, forward to client
-		// through retVal
+		
+		ReservationDTO responseDto = new ReservationDTO(accommodationService.reserveAccommodation(reservationDTO));
+		
+		if(responseDto.getId() == null) {
+			System.out.println("Kreiranje");
+		}
+		
 		reservationResponse = new ReservationResponseDTO();
 		reservationResponse.setAgent_id(1000l);
 		reservationResponse.setId(1000l);
@@ -211,6 +218,7 @@ public class AccommodationController {
 		
 		return new ResponseEntity<Boolean>(accommodationService.checkAvailability(requestDto), HttpStatus.OK);
 	}
+	
 
 }
 
