@@ -60,13 +60,18 @@ insert into tbl_accommodation(id, agent_id, category, accommodation_type, image_
 values (18, 3, 3, 1, 'https://imgcld.yatra.com/ytimages/image/upload/t_seo_Hotel_w_930_h_550_c_fill_g_auto_q_40_f_jpg/v1497586632/Hotel/Thekkady/00002140/swimming_pool__(2)_kxWktR.jpg', 'Bla bla bla', 200, 'XX YY', true, false, true, false, false, false, false, true);
 
 --COMMENT--
-insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (1, 1, 1, 'This is comment text', 2, '2018-08-25 7:30');
+insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (1, 1, 1, 'This is commentdasdadqw text', 2, '2018-09-04 7:30');
+insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (2, 8, 2, 'This ieqweqwes comment text', 2, '2018-09-04 7:30');
+insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (3, 10, 1, 'Thqwewqeis is comment text', 2, '2018-09-04 7:30');
+insert into tbl_comment(id, user_id, accommodation_id, text, approval_state, comment_time) values (4, 9, 2, 'This is comment texeqweqt', 2, '2018-09-04 7:30');
 
 --RESERVATION--
 insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (1, 1, 1, '2018-08-25 7:30', '2018-08-29 23:59', 0, 11);
 insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (2, 7, 2, '2018-08-29 7:30', '2018-08-31 23:59', 0, 11);
-insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (3, 1, 1, '2018-09-01 7:30', '2018-09-10 23:59', 0, 11);
-insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (4, 8, 2, '2018-09-01 7:30', '2018-09-15 23:59', 0, 11);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (3, 1, 1, '2018-09-01 7:30', '2018-09-02 23:59', 1, 11);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (4, 8, 2, '2018-08-11 7:30', '2018-09-02 23:59', 1, 11);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (5, 10, 1, '2018-08-21 7:30', '2018-09-03 23:59', 1, 11);
+insert into tbl_reservation(id, client_id, accommodation_id, start_time, end_time, status, price) values (6, 9, 2, '2018-08-01 7:30', '2018-09-01 23:59', 1, 11);
 
 insert into tbl_message(id, receiver_id, sender_id, message_time, text) values (1, 1, 3, '2018-09-15 23:59', 'Message from database. from  ag1@a.a to u1@a.a');
 insert into tbl_message(id, receiver_id, sender_id, message_time, text) values (2, 3, 1, '2018-09-15 23:59', 'Message from database. from  u1@a.a to ag1@a.a');

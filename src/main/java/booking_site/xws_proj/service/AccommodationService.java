@@ -178,7 +178,8 @@ public class AccommodationService implements IAccommodationService {
 		if (reservationRepository.findOne(reservationId).getStartTime().before(new Date())) {
 			throw new CancelReservationException();
 		}
-		return null;
+		reservationRepository.delete(reservationId);
+		return true;
 }
 
 }
