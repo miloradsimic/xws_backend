@@ -11,9 +11,7 @@ import booking_site.xws_proj.domain.enums.AccommodationType;
 
 public class SearchRequestDTO {
 	private String address;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date from;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date to;
 	@JsonInclude(Include.NON_NULL)
 	private ArrayList<Integer> category;

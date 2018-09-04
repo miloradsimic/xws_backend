@@ -1,6 +1,7 @@
 package booking_site.xws_proj.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
 
+import booking_site.xws_proj.domain.AClient;
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.Reservation;
 import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
-import booking_site.xws_proj.domain.dto.request.ReservationDTO;
+import booking_site.xws_proj.domain.dto.request.ReservationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
 import booking_site.xws_proj.domain.querydsl.predicates.ReservationPredicate;
+import booking_site.xws_proj.repository.AUserRepository;
 import booking_site.xws_proj.repository.AccommodationRepository;
 import booking_site.xws_proj.repository.ReservationRepository;
 
@@ -25,6 +28,9 @@ public class AccommodationService implements IAccommodationService {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private AUserRepository aUserRepository;
 
 	@Override
 	public Accommodation create(Accommodation entry) {
@@ -91,13 +97,24 @@ public class AccommodationService implements IAccommodationService {
 	@Override
 	public Boolean checkAvailability(CheckAvailabilityDTO requestDto) {
 
-		ArrayList<Long> reserv = new ArrayList<Long>();
+//		ArrayList<Long> reserv = new ArrayList<Long>();
+//
+//		Predicate pred = ReservationPredicate.findReserved(requestDto.getFrom(), requestDto.getTo(),
+//				requestDto.getAccommodation_id());
+//
+//		reservationRepository.findAll(pred).forEach(e -> reserv.add(e.getAccommodation().getId()));
+//		
+		ArrayList<Reservation> reserv = new ArrayList<Reservation>();
 
 		Predicate pred = ReservationPredicate.findReserved(requestDto.getFrom(), requestDto.getTo(),
 				requestDto.getAccommodation_id());
 
-		reservationRepository.findAll(pred).forEach(e -> reserv.add(e.getAccommodation().getId()));
-
+		reservationRepository.findAll(pred).forEach(e -> reserv.add(e));
+		
+		for (Reservation reservation : reserv) {
+			System.out.println(reservation.toString());
+		}
+		
 		if (reserv.isEmpty()) {
 			return true;
 		} else {
@@ -106,15 +123,20 @@ public class AccommodationService implements IAccommodationService {
 	}
 
 	@Override
-	public Reservation reserveAccommodation(ReservationDTO dto) {
+	public Reservation reserveAccommodation(ReservationRequestDTO dto) {
 		CheckAvailabilityDTO arg = new CheckAvailabilityDTO();
-		arg.setAccommodation_id(dto.getAccommmodation().getId());
-		arg.setFrom(dto.getStart_time());
-		arg.setTo(dto.getEnd_time());
+		arg.setAccommodation_id(dto.getAccommodation_id());
+		arg.setFrom(dto.getFrom());
+		arg.setTo(dto.getTo());
+		System.out.println("from:  "+ dto.getFrom() + "   to:  " + dto.getTo() + "  id:  " + dto.getAccommodation_id());
 
 		if (checkAvailability(arg)) {
-			Reservation e = new Reservation(dto);
-			return reservationRepository.save(new Reservation(dto));
+			AClient c = ((AClient)aUserRepository.findOne(dto.getClient_id()));
+			Accommodation a = accommodationRepository.findOne(dto.getAccommodation_id());
+			Reservation e = new Reservation(dto, c,	a);
+
+			System.out.println(e.toString());
+			return reservationRepository.save(e);
 		}
 		return null;
 

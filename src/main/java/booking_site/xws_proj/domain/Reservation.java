@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import booking_site.xws_proj.domain.dto.request.ReservationDTO;
+import booking_site.xws_proj.domain.dto.request.ReservationRequestDTO;
 import booking_site.xws_proj.domain.enums.Status;
 
 @Entity
@@ -27,7 +27,10 @@ public class Reservation {
 	@JoinColumn(name = "client_id" /* , insertable = false, updatable = false */)
 	private AClient client;
 	@ManyToOne
-	@JoinColumn(name = "accommodation_id" /* , insertable = false, updatable = false */)
+	@JoinColumn(name = "accommodation_id" /*
+											 * , insertable = false, updatable =
+											 * false
+											 */)
 	private Accommodation accommodation;
 	@Column(nullable = false, name = "start_time")
 	private Date startTime;
@@ -40,11 +43,11 @@ public class Reservation {
 		status = Status.WAITING_FOR_APPROVAL;
 	}
 
-	public Reservation(ReservationDTO dto) {
-		client = dto.getClient();
-		startTime = dto.getStart_time();
-		endTime = dto.getEnd_time();
-		accommodation = dto.getAccommmodation();
+	public Reservation(ReservationRequestDTO dto, AClient c, Accommodation a) {
+		client = c;
+		startTime = dto.getFrom();
+		endTime = dto.getTo();
+		accommodation = a;
 		status = Status.WAITING_FOR_APPROVAL;
 	}
 
@@ -95,5 +98,13 @@ public class Reservation {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
+
+	@Override
+	public String toString() {
+		return "Reservation [id=" + id + ", client=" + client + ", accommodation=" + accommodation + ", startTime="
+				+ startTime + ", endTime=" + endTime + ", status=" + status + "]";
+	}
+	
+	
 
 }

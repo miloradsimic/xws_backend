@@ -15,7 +15,7 @@ public class CommentPredicate {
 		return QComment.comment.approvalState.eq(Status.WAITING_FOR_APPROVAL);
 	}
 
-	public static Predicate findAllWaitingForAccommodation(long id) {
-		return QComment.comment.accommodation.id.eq(id);
+	public static Predicate findAllForAccommodation(long id) {
+		return QComment.comment.accommodation.id.eq(id).and(QComment.comment.approvalState.eq(Status.APPROVED));
 	}
 }

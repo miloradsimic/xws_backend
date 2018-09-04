@@ -15,6 +15,7 @@ import booking_site.xws_proj.controller.exceptions.NeverReservedException;
 import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
 import booking_site.xws_proj.controller.exceptions.NotFoundException;
 import booking_site.xws_proj.controller.exceptions.NotLoggedException;
+import booking_site.xws_proj.controller.exceptions.ReservationNotAvailableException;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
@@ -51,6 +52,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	
 	@ExceptionHandler(value = { NeverReservedException.class })
 	protected ResponseEntity<Object> handleNeverReservedConflict(RuntimeException ex, WebRequest request) {
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@ExceptionHandler(value = { ReservationNotAvailableException.class })
+	protected ResponseEntity<Object> handleReservationNotAvailableConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 

@@ -2,17 +2,34 @@ package booking_site.xws_proj.domain.dto.response;
 
 import java.util.Date;
 
+import booking_site.xws_proj.domain.Reservation;
+import booking_site.xws_proj.domain.dto.mappper.AccommodationMapper;
+import booking_site.xws_proj.domain.dto.mappper.UserMapper;
+
 public class ReservationResponseDTO {
 
 	private Long id;
-	private Long user_id;
-	private Long agent_id;
-	private Date start_time;
-	private Date end_time;
-	private String address;
+	private UserResponseDTO client;
+	private AccommodationResponseDTO accommodation;
+	private Date from;
+	private Date to;
 
 	public ReservationResponseDTO() {
 		super();
+	}
+
+	public ReservationResponseDTO(Reservation r) {
+
+		if (r.getId() != null) {
+			id = r.getId();
+		}
+
+		if (r.getClient() != null) {
+			client = UserMapper.mapEntityIntoDTO(r.getClient());
+		}
+		accommodation = AccommodationMapper.mapEntityIntoDTO(r.getAccommodation());
+		from = r.getStartTime();
+		to = r.getEndTime();
 	}
 
 	public Long getId() {
@@ -23,44 +40,36 @@ public class ReservationResponseDTO {
 		this.id = id;
 	}
 
-	public Long getUser_id() {
-		return user_id;
+	public UserResponseDTO getClient() {
+		return client;
 	}
 
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public void setClient(UserResponseDTO client) {
+		this.client = client;
 	}
 
-	public Long getAgent_id() {
-		return agent_id;
+	public AccommodationResponseDTO getAccommodation() {
+		return accommodation;
 	}
 
-	public void setAgent_id(Long agent_id) {
-		this.agent_id = agent_id;
+	public void setAccommodation(AccommodationResponseDTO accommodation) {
+		this.accommodation = accommodation;
 	}
 
-	public Date getStart_time() {
-		return start_time;
+	public Date getFrom() {
+		return from;
 	}
 
-	public void setStart_time(Date start_time) {
-		this.start_time = start_time;
+	public void setFrom(Date from) {
+		this.from = from;
 	}
 
-	public Date getEnd_time() {
-		return end_time;
+	public Date getTo() {
+		return to;
 	}
 
-	public void setEnd_time(Date end_time) {
-		this.end_time = end_time;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
+	public void setTo(Date to) {
+		this.to = to;
 	}
 
 }

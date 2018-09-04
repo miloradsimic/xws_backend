@@ -11,26 +11,21 @@ import booking_site.xws_proj.domain.querydsl.QReservation;
 
 public class ReservationPredicate {
 
-	// If user have approved reservation, he can comment on selected accommodation
+	// If user have approved reservation, he can comment on selected
+	// accommodation
 	public static Predicate hasApprovedReservation(AClient user, Accommodation accommodation) {
-		return QReservation.reservation.client.eq(user)
-				.and(QReservation.reservation.accommodation.eq(accommodation))
+		return QReservation.reservation.client.eq(user).and(QReservation.reservation.accommodation.eq(accommodation))
 				.and(QReservation.reservation.status.eq(Status.APPROVED));
 	}
 
 	public static Predicate findReserved(Date from, Date to) {
-		return QReservation.reservation.endTime.before(to)
-				.and(QReservation.reservation.endTime.after(from))
-				.or(QReservation.reservation.startTime.after(from))
-				.and(QReservation.reservation.startTime.before(to));
+		return QReservation.reservation.endTime.before(to).and(QReservation.reservation.endTime.after(from))
+				.or(QReservation.reservation.startTime.after(from)).and(QReservation.reservation.startTime.before(to));
 	}
 
 	public static Predicate findReserved(Date from, Date to, Long id) {
-		System.out.println(from  + "   " + to  + "    " + id );
-		return QReservation.reservation.endTime.before(to)
-				.and(QReservation.reservation.endTime.after(from))
-				.or(QReservation.reservation.startTime.after(from))
-				.and(QReservation.reservation.startTime.before(to))
-				.and(QReservation.reservation.accommodation.id.eq(id));
+		QReservation p = QReservation.reservation;
+		// Nadji mi sve rezervacije koje imaju upadaju u zadati vremenski domen
+		return (p.startTime.between(from, to).or(p.endTime.between(from, to))).and(p.accommodation.id.eq(id));
 	}
 }

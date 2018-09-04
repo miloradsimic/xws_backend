@@ -1,5 +1,7 @@
 package booking_site.xws_proj.controller;
 
+import java.rmi.ServerException;
+import java.rmi.ServerRuntimeException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,13 +21,14 @@ import booking_site.xws_proj.AppUtils;
 import booking_site.xws_proj.controller.exceptions.NotAuthorizedException;
 import booking_site.xws_proj.controller.exceptions.NotFoundException;
 import booking_site.xws_proj.controller.exceptions.NotLoggedException;
+import booking_site.xws_proj.controller.exceptions.ReservationNotAvailableException;
 import booking_site.xws_proj.domain.AUser;
 import booking_site.xws_proj.domain.Accommodation;
 import booking_site.xws_proj.domain.Reservation;
 import booking_site.xws_proj.domain.dto.mappper.AccommodationMapper;
 import booking_site.xws_proj.domain.dto.request.AccommodationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.CheckAvailabilityDTO;
-import booking_site.xws_proj.domain.dto.request.ReservationDTO;
+import booking_site.xws_proj.domain.dto.request.ReservationRequestDTO;
 import booking_site.xws_proj.domain.dto.request.SearchRequestDTO;
 import booking_site.xws_proj.domain.dto.response.AccommodationResponseDTO;
 import booking_site.xws_proj.domain.dto.response.ReservationResponseDTO;
@@ -161,9 +164,8 @@ public class AccommodationController {
 	 * @return ReservationResponseDTO or ErrorResponse object
 	 */
 	@RequestMapping(path = "/reservation", method = RequestMethod.POST)
-	public ResponseEntity<Object> makeAReservatiosn(HttpServletRequest request,
-			@RequestBody ReservationDTO reservationDTO) {
-		ReservationResponseDTO reservationResponse;
+	public ResponseEntity<ReservationResponseDTO> makeAReservation(HttpServletRequest request,
+			@RequestBody ReservationRequestDTO reservationDTO) {
 		AUser aUser;
 
 		String encoded = request.getHeader("Authorization");
@@ -171,24 +173,21 @@ public class AccommodationController {
 		String password = AppUtils.getPasswordFromBasic(encoded);
 		if ((aUser = aUserRepository.findByEmailAndPassword(username, password)) == null) {
 			throw new NotLoggedException();
-
 		}
-		if (aUser.getRole() != Role.AGENT || aUser.getRole() != Role.USER) {
+		if (aUser.getRole() != Role.AGENT && aUser.getRole() != Role.USER) {
 			throw new NotAuthorizedException();
 		} // else permission granted
 		
-		ReservationDTO responseDto = new ReservationDTO(accommodationService.reserveAccommodation(reservationDTO));
+		reservationDTO.setClient_id(aUser.getId());
+		Reservation entry = accommodationService.reserveAccommodation(reservationDTO);
 		
-		if(responseDto.getId() == null) {
-			System.out.println("Kreiranje");
+		if(entry == null) {
+			throw new ReservationNotAvailableException();
 		}
 		
-		reservationResponse = new ReservationResponseDTO();
-		reservationResponse.setAgent_id(1000l);
-		reservationResponse.setId(1000l);
-		reservationResponse.setStart_time(new Date());
-		reservationResponse.setEnd_time(new Date());
-		return new ResponseEntity<Object>(reservationResponse, HttpStatus.OK);
+		ReservationResponseDTO responseDto = new ReservationResponseDTO(entry);
+		
+		return new ResponseEntity<ReservationResponseDTO>(responseDto, HttpStatus.CREATED);
 
 	}
 	

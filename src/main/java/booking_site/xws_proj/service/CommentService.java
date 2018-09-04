@@ -74,7 +74,7 @@ public class CommentService implements ICommentService {
 
 	@Override
 	public List<Comment> findAllForAccommodation(long id) {
-		Predicate pred = CommentPredicate.findAllWaitingForAccommodation(id);
+		Predicate pred = CommentPredicate.findAllForAccommodation(id);
 		List<Comment> list = new ArrayList<>();
 		commentRepository.findAll(pred).forEach(e -> list.add(e));
 		return list;
