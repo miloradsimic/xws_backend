@@ -32,9 +32,24 @@ public class WebServiceConfig {
 		definition.setSchema(studentsSchema);
 		return definition;
 	}
+	
+	@Bean(name = "login")
+	public DefaultWsdl11Definition loginDefinition(XsdSchema loginSchema) {
+		DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
+		definition.setPortTypeName("LoginPort");
+		definition.setTargetNamespace("http://beans.soap.xws_proj.booking_site");
+		definition.setLocationUri("/ws");
+		definition.setSchema(loginSchema);
+		return definition;
+	}
 
 	@Bean
 	public XsdSchema studentsSchema() {
 		return new SimpleXsdSchema(new ClassPathResource("student-details.xsd"));
+	}
+	
+	@Bean
+	public XsdSchema loginSchema() {
+		return new SimpleXsdSchema(new ClassPathResource("login.xsd"));
 	}
 }
