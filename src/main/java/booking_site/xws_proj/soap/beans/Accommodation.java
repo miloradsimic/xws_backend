@@ -15,21 +15,21 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for AgentDetails complex type.
+ * <p>Java class for Accommodation complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="AgentDetails">
+ * &lt;complexType name="Accommodation">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="address" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="tin" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="auth_token" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="category" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="image_uri" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,27 +39,26 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AgentDetails", propOrder = {
+@XmlType(name = "Accommodation", propOrder = {
     "id",
-    "name",
-    "email",
     "address",
-    "tin",
-    "authToken"
+    "category",
+    "type",
+    "description",
+    "imageUri"
 })
-public class AgentDetails {
+public class Accommodation {
 
     protected long id;
     @XmlElement(required = true)
-    protected String name;
-    @XmlElement(required = true)
-    protected String email;
-    @XmlElement(required = true)
     protected String address;
+    protected int category;
     @XmlElement(required = true)
-    protected String tin;
-    @XmlElement(name = "auth_token", required = true)
-    protected String authToken;
+    protected String type;
+    @XmlElement(required = true)
+    protected String description;
+    @XmlElement(name = "image_uri", required = true)
+    protected String imageUri;
 
     /**
      * Gets the value of the id property.
@@ -75,54 +74,6 @@ public class AgentDetails {
      */
     public void setId(long value) {
         this.id = value;
-    }
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the email property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Sets the value of the email property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEmail(String value) {
-        this.email = value;
     }
 
     /**
@@ -150,51 +101,91 @@ public class AgentDetails {
     }
 
     /**
-     * Gets the value of the tin property.
+     * Gets the value of the category property.
+     * 
+     */
+    public int getCategory() {
+        return category;
+    }
+
+    /**
+     * Sets the value of the category property.
+     * 
+     */
+    public void setCategory(int value) {
+        this.category = value;
+    }
+
+    /**
+     * Gets the value of the type property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getTin() {
-        return tin;
+    public String getType() {
+        return type;
     }
 
     /**
-     * Sets the value of the tin property.
+     * Sets the value of the type property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setTin(String value) {
-        this.tin = value;
+    public void setType(String value) {
+        this.type = value;
     }
 
     /**
-     * Gets the value of the authToken property.
+     * Gets the value of the description property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getAuthToken() {
-        return authToken;
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * Sets the value of the authToken property.
+     * Sets the value of the description property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setAuthToken(String value) {
-        this.authToken = value;
+    public void setDescription(String value) {
+        this.description = value;
+    }
+
+    /**
+     * Gets the value of the imageUri property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    /**
+     * Sets the value of the imageUri property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setImageUri(String value) {
+        this.imageUri = value;
     }
 
 }

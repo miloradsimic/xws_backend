@@ -23,11 +23,13 @@ public interface IAccommodationService {
 
 	// ostalo
 	List<Accommodation> findAll();
-	
+
+	List<Accommodation> findAll(Long user_id);
+
 	List<Accommodation> search(SearchRequestDTO dto);
 
 	Boolean checkAvailability(CheckAvailabilityDTO requestDto);
-	
+
 	Reservation reserveAccommodation(ReservationRequestDTO dto);
 
 	List<ReservationResponseDTO> findAllReservationsForUser(Long userId);
@@ -35,4 +37,4 @@ public interface IAccommodationService {
 	List<ReservationResponseDTO> findAllReservationsForAccommodation(Long accommodationId);
 
 	Boolean cancelReservation(Long id, Long accommodationId);
- }
+}

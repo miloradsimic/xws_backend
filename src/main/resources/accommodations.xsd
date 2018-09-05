@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://beans.soap.xws_proj.booking_site" xmlns:tns="http://beans.soap.xws_proj.booking_site"
+	elementFormDefault="qualified">
+
+	<xs:element name="GetAllAccommodationsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="auth_token" type="xs:string" />
+				<xs:element name="id" type="xs:long" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="GetAllAccommodationsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Accommodations" type="tns:Accommodations" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:complexType name="Accommodations">
+		<xs:sequence>
+			<xs:element name="Accommodation" type="tns:Accommodation"
+				minOccurs="0" maxOccurs="unbounded"></xs:element>
+			<xs:element name="auth_token" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Accommodation">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long" />
+			<xs:element name="address" type="xs:string" />
+			<xs:element name="category" type="xs:int" />
+			<xs:element name="type" type="xs:string" />
+			<xs:element name="description" type="xs:string" />
+			<xs:element name="image_uri" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

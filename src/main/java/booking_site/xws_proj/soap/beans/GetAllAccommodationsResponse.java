@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="AgentDetails" type="{http://beans.soap.xws_proj.booking_site}AgentDetails"/>
+ *         &lt;element name="Accommodations" type="{http://beans.soap.xws_proj.booking_site}Accommodations"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "agentDetails"
+    "accommodations"
 })
-@XmlRootElement(name = "GetLoginResponse")
-public class GetLoginResponse {
+@XmlRootElement(name = "GetAllAccommodationsResponse")
+public class GetAllAccommodationsResponse {
 
-    @XmlElement(name = "AgentDetails", required = true)
-    protected AgentDetails agentDetails;
+    @XmlElement(name = "Accommodations", required = true)
+    protected Accommodations accommodations;
 
     /**
-     * Gets the value of the agentDetails property.
+     * Gets the value of the accommodations property.
      * 
      * @return
      *     possible object is
-     *     {@link AgentDetails }
+     *     {@link Accommodations }
      *     
      */
-    public AgentDetails getAgentDetails() {
-        return agentDetails;
+    public Accommodations getAccommodations() {
+        return accommodations;
     }
 
     /**
-     * Sets the value of the agentDetails property.
+     * Sets the value of the accommodations property.
      * 
      * @param value
      *     allowed object is
-     *     {@link AgentDetails }
+     *     {@link Accommodations }
      *     
      */
-    public void setAgentDetails(AgentDetails value) {
-        this.agentDetails = value;
+    public void setAccommodations(Accommodations value) {
+        this.accommodations = value;
     }
 
 }

@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="AgentDetails" type="{http://beans.soap.xws_proj.booking_site}AgentDetails"/>
+ *         &lt;element name="auth_token" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +37,54 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "agentDetails"
+    "authToken",
+    "id"
 })
-@XmlRootElement(name = "GetLoginResponse")
-public class GetLoginResponse {
+@XmlRootElement(name = "GetAllAccommodationsRequest")
+public class GetAllAccommodationsRequest {
 
-    @XmlElement(name = "AgentDetails", required = true)
-    protected AgentDetails agentDetails;
+    @XmlElement(name = "auth_token", required = true)
+    protected String authToken;
+    protected long id;
 
     /**
-     * Gets the value of the agentDetails property.
+     * Gets the value of the authToken property.
      * 
      * @return
      *     possible object is
-     *     {@link AgentDetails }
+     *     {@link String }
      *     
      */
-    public AgentDetails getAgentDetails() {
-        return agentDetails;
+    public String getAuthToken() {
+        return authToken;
     }
 
     /**
-     * Sets the value of the agentDetails property.
+     * Sets the value of the authToken property.
      * 
      * @param value
      *     allowed object is
-     *     {@link AgentDetails }
+     *     {@link String }
      *     
      */
-    public void setAgentDetails(AgentDetails value) {
-        this.agentDetails = value;
+    public void setAuthToken(String value) {
+        this.authToken = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     * 
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     */
+    public void setId(long value) {
+        this.id = value;
     }
 
 }

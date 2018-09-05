@@ -42,6 +42,16 @@ public class WebServiceConfig {
 		definition.setSchema(loginSchema);
 		return definition;
 	}
+	
+	@Bean(name = "accommodations")
+	public DefaultWsdl11Definition accommodationsDefinition(XsdSchema accommodationsSchema) {
+		DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
+		definition.setPortTypeName("AccommodationsPort");
+		definition.setTargetNamespace("http://beans.soap.xws_proj.booking_site");
+		definition.setLocationUri("/ws");
+		definition.setSchema(accommodationsSchema);
+		return definition;
+	}
 
 	@Bean
 	public XsdSchema studentsSchema() {
@@ -51,5 +61,11 @@ public class WebServiceConfig {
 	@Bean
 	public XsdSchema loginSchema() {
 		return new SimpleXsdSchema(new ClassPathResource("login.xsd"));
+	}
+	
+
+	@Bean
+	public XsdSchema accommodationsSchema() {
+		return new SimpleXsdSchema(new ClassPathResource("accommodations.xsd"));
 	}
 }

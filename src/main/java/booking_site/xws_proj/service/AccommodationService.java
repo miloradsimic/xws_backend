@@ -75,6 +75,15 @@ public class AccommodationService implements IAccommodationService {
 	}
 
 	@Override
+	public List<Accommodation> findAll(Long user_id) {
+		List<Accommodation> list = new ArrayList<>();
+		Predicate pred = AccommodationPredicate.findForClient(user_id);
+		accommodationRepository.findAll(pred).forEach(e -> list.add(e));
+		return list;
+	}
+
+	
+	@Override
 	public List<Accommodation> search(SearchRequestDTO dto) {
 		ArrayList<Accommodation> list = new ArrayList<Accommodation>();
 		ArrayList<Accommodation> list2 = new ArrayList<Accommodation>();
